@@ -6,159 +6,78 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 ---
 
-# Funcionalidades
+# Estado atual
 
-- Leitura do extrato em CSV
-- Reconstrução do contrato
-- Cálculo da TR histórica
-- Cálculo da taxa efetiva mensal
-- Projeção das parcelas restantes
-- Simulação de amortizações extraordinárias
-- Comparação entre redução de prazo e redução de prestação
-- Exportação para CSV
-- Geração de gráficos
-- Relatórios financeiros
+O projeto está na versão 0.5. A importação, validação, reconstrução histórica e projeção de parcelas futuras estão disponíveis. `main.py` continua sendo apenas o arquivo inicial criado pelo `uv`; uma interface de linha de comando será criada em etapa posterior.
+
+A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e oferece TR média histórica ou personalizada. Relatórios, gráficos e amortizações são funcionalidades planejadas para versões posteriores.
 
 ---
 
-# Estrutura
+# Dados de referência
 
-```
-financiamento_bb/
+`extrato319405086.pdf` é o extrato-base original. `extrato.csv` é o CSV de referência do projeto.
 
-dados/
-extrato.csv
-
-simulador/
-
-graficos/
-
-testes/
-
-main.py
-
-README.md
-
-AGENT.md
-```
+Esses arquivos não devem ser alterados pela aplicação. O `extrator2.py` é apenas uma prova de conceito; o extrator definitivo será implementado posteriormente como um componente próprio, sem sobrescrever os dados de referência.
 
 ---
 
 # Instalação
 
+Com o [uv](https://docs.astral.sh/uv/) instalado, clone o repositório e sincronize o ambiente:
+
 ```bash
 git clone <repositorio>
 
-cd financiamento_bb
+cd calcular_financiamento_apartamento
 
-python -m venv .venv
-
-source .venv/bin/activate
+uv sync
 ```
 
-Windows
+O `uv` cria e gerencia automaticamente o ambiente virtual em `.venv`, usando a versão do Python definida em `.python-version` e as dependências bloqueadas em `uv.lock`.
 
-```powershell
-.venv\Scripts\activate
-```
-
-Instale as dependências
+Para incluir também as dependências de desenvolvimento:
 
 ```bash
-pip install -r requirements.txt
+uv sync --all-groups
 ```
 
 ---
 
-# Executando
+# Ambiente
 
-Projetar financiamento
+Python 3.13 é a versão oficial do projeto.
 
-```bash
-python main.py projetar
-```
-
-Gerar relatório
-
-```bash
-python main.py relatorio
-```
-
-Gerar gráficos
-
-```bash
-python main.py graficos
-```
-
-Simular amortização
-
-```bash
-python main.py amortizar --valor 10000
-```
-
-Redução de prazo
-
-```bash
-python main.py amortizar --valor 10000 --reduzir-prazo
-```
-
-Redução da prestação
-
-```bash
-python main.py amortizar --valor 10000 --reduzir-parcela
-```
+O `uv` é o único gerenciador de ambiente e dependências adotado. Não usamos `requirements.txt`, criação manual de `venv` ou instalação direta com `pip`.
 
 ---
 
-# Arquivos gerados
+# Linha de comando
 
+Validar o extrato e a sequência de parcelas:
+
+```bash
+uv run python main.py validar
 ```
-dados/projecao.csv
 
-graficos/
+Projetar as parcelas restantes:
 
-saldo_devedor.png
+```bash
+uv run python main.py projetar
+```
 
-prestacoes.png
+Gerar relatório em Markdown ou texto simples:
 
-juros.png
-
-tr.png
-
-relatorio.txt
+```bash
+uv run python main.py relatorio
+uv run python main.py relatorio --formato txt
 ```
 
 ---
 
 # Roadmap
 
-## Fase 1
-
-- Conversão PDF → CSV
-
-## Fase 2
-
-- Reconstrução do contrato
-
-## Fase 3
-
-- Projeção das parcelas
-
-## Fase 4
-
-- Simulação de amortizações
-
-## Fase 5
-
-- Dashboard Streamlit
-
-## Fase 6
-
-- Comparação entre contratos
-
-## Fase 7
-
-- Suporte a outros bancos
+O roadmap detalhado está em [ROADMAP.md](ROADMAP.md). A próxima versão será a 0.4: calibração do modelo contra o histórico.
 
 ---
 

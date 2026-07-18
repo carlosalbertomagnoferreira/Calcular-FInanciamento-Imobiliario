@@ -45,17 +45,17 @@ Criar toda a estrutura inicial.
 - SPEC
 - ARCHITECTURE
 - Configuração do projeto
-- requirements.txt
 - pyproject.toml
-- Logger
-- Configurações globais
+- uv.lock
+- Definição do Python 3.13 como versão oficial
+- Dados de referência (PDF e CSV experimental)
 
 ### Critério de aceite
 
 Projeto executando:
 
 ```bash
-python main.py --help
+uv run python main.py
 ```
 
 ---
@@ -63,13 +63,15 @@ python main.py --help
 # Versão 0.2
 ## Leitura do Extrato
 
+Status: concluída.
+
 ### Objetivos
 
-Importar corretamente o CSV.
+Entregar a primeira funcionalidade do produto: importar e validar, sem alterar, o CSV de referência.
 
 ### Entregas
 
-Leitor CSV
+Leitor CSV desacoplado da CLI.
 
 Validação de:
 
@@ -78,20 +80,33 @@ Validação de:
 - datas
 - valores
 
-Conversão automática para DataFrame.
+Conversão de números brasileiros e datas para um DataFrame normalizado.
+
+Tratamento explícito de duplicidades, campos vazios e saldos iguais a zero, sem ainda interpretar eventos financeiros ou calcular parcelas.
+
+Testes unitários para o leitor e para cada regra de validação.
+
+### Fora do escopo
+
+- extração de PDF;
+- reconstrução financeira;
+- cálculo de TR, juros, amortização ou saldo;
+- calibração, projeção e CLI.
 
 ### Critério
 
-Leitura de qualquer CSV compatível.
+Leitura do CSV de referência e de qualquer CSV que cumpra o contrato de colunas, sem alterar o arquivo de origem e com erros de validação compreensíveis.
 
 ---
 
 # Versão 0.3
 ## Reconstrução do Contrato
 
+Status: concluída.
+
 ### Objetivos
 
-Reconstruir todas as parcelas históricas.
+Reconstruir todos os eventos históricos, preservando os valores reportados pelo extrato.
 
 ### Entregas
 
@@ -103,14 +118,18 @@ Calcular:
 - saldo
 - TR
 
+Registrar diagnósticos de diferença de juros, prestação e saldo, sem forçar uma recorrência PRICE antes da calibração.
+
 ### Critério
 
-Reconstrução das 125 parcelas existentes.
+Reconstrução dos 164 eventos do CSV de referência, sem alterar o extrato de origem.
 
 ---
 
 # Versão 0.4
 ## Calibração
+
+Status: concluída com calibração avançada adiada.
 
 ### Objetivos
 
@@ -120,7 +139,11 @@ Comparar cálculos com o contrato real.
 
 Calcular erro percentual.
 
-Ajustar automaticamente:
+Classificar eventos elegíveis e gerar relatório auditável de métricas.
+
+Ajustar parâmetros somente após validar que os desvios não decorrem de componentes ou eventos não classificados.
+
+Parâmetros candidatos:
 
 - TR média
 - tolerâncias
@@ -142,6 +165,8 @@ Saldo:
 # Versão 0.5
 ## Projeção
 
+Status: concluída.
+
 ### Objetivos
 
 Projetar todas as parcelas futuras.
@@ -151,6 +176,8 @@ Projetar todas as parcelas futuras.
 Gerar:
 
 projecao.csv
+
+Gerar DataFrame de projeção com cenário de TR média histórica ou TR personalizada.
 
 ### Informações
 
@@ -168,6 +195,8 @@ Para cada parcela:
 
 # Versão 0.6
 ## Relatórios
+
+Status: concluída.
 
 ### Objetivos
 

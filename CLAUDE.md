@@ -11,7 +11,7 @@ Antes de modificar qualquer código, leia também:
 3. DECISIONS.md
 4. ROADMAP.md
 
-O README.md é destinado aos usuários, não às regras de implementação.
+O README.MD é destinado aos usuários, não às regras de implementação.
 
 ---
 
@@ -151,7 +151,7 @@ Prefira reutilização.
 
 Obrigatório:
 
-- Python 3.12+
+- Python 3.13
 - type hints
 - dataclasses quando apropriado
 - docstrings (Google Style)
@@ -168,10 +168,10 @@ Antes de considerar uma tarefa concluída:
 Executar:
 
 ```bash
-ruff check .
-black --check .
-mypy .
-pytest
+uv run --group dev ruff check .
+uv run --group dev black --check .
+uv run --group dev mypy .
+uv run --group dev pytest
 ```
 
 Todos devem passar.
@@ -254,7 +254,7 @@ Nunca implementar funcionalidades financeiras sem testes.
 
 Toda alteração relevante deve atualizar:
 
-- README.md (se impactar o uso)
+- README.MD (se impactar o uso)
 - SPEC.md (se alterar regras)
 - ARCHITECTURE.md (se alterar estrutura)
 - DECISIONS.md (se alterar decisões arquiteturais)

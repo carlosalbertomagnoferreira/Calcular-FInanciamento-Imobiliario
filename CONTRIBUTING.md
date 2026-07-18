@@ -24,32 +24,14 @@ Nunca sacrificar a precisão dos cálculos por otimizações prematuras.
 
 # Ambiente
 
-Python mínimo:
+Versão oficial do Python:
 
-3.12
+3.13
 
-Criar ambiente virtual:
-
-```bash
-python -m venv .venv
-```
-
-Linux/macOS
+O ambiente e as dependências são gerenciados exclusivamente pelo `uv`:
 
 ```bash
-source .venv/bin/activate
-```
-
-Windows
-
-```powershell
-.venv\Scripts\activate
-```
-
-Instalar dependências:
-
-```bash
-pip install -r requirements.txt
+uv sync --all-groups
 ```
 
 ---
@@ -173,19 +155,19 @@ Cada PR deverá:
 Antes de enviar qualquer alteração execute:
 
 ```bash
-pytest
+uv run --group dev pytest
 ```
 
 ```bash
-ruff check .
+uv run --group dev ruff check .
 ```
 
 ```bash
-black .
+uv run --group dev black --check .
 ```
 
 ```bash
-mypy .
+uv run --group dev mypy .
 ```
 
 Todos devem passar sem erros.

@@ -29,6 +29,10 @@ Python oferece excelente ecossistema para:
 
 Além disso, reduz significativamente o tempo de desenvolvimento.
 
+### Versão oficial
+
+Python 3.13. A versão é declarada em `.python-version` e em `pyproject.toml`.
+
 ---
 
 # ADR-002
@@ -63,9 +67,11 @@ Aceito
 
 ### Motivação
 
-O CSV representa a fonte oficial do contrato.
+O PDF de referência é a fonte primária do extrato. O CSV gerado a partir dele é a fonte de trabalho da aplicação.
 
-Toda transformação deverá ocorrer sobre cópias.
+Nenhum dos dois arquivos de referência pode ser alterado pela aplicação. Toda transformação deverá ocorrer sobre cópias em memória ou em arquivos de saída distintos.
+
+O `extrator2.py` é uma prova de conceito e não integra a aplicação; o extrator definitivo será implementado em fase futura sem sobrescrever os arquivos de referência.
 
 ---
 
@@ -438,6 +444,48 @@ Este projeto não é um simulador genérico de financiamentos.
 Seu objetivo é reconstruir matematicamente o contrato real do Banco do Brasil, reproduzindo o comportamento observado no histórico antes de realizar projeções.
 
 Toda nova funcionalidade deve preservar essa premissa.
+
+---
+
+# ADR-021
+
+## Reconstrução histórica orientada pelos valores reportados
+
+### Status
+
+Aceito
+
+### Contexto
+
+O extrato contém eventos que não são necessariamente parcelas mensais, incluindo períodos de carência, encargos e ajustes. O saldo atualizado não segue uma recorrência PRICE simples em todas as linhas.
+
+### Decisão
+
+Na reconstrução histórica, os campos reportados pelo Banco do Brasil são autoritativos. `Capital` representa a amortização histórica; `Saldo Atualizado` não é sobrescrito por um saldo calculado; e a TR é não definida quando o saldo devedor é zero.
+
+O sistema calcula valores teóricos e resíduos apenas como diagnósticos. A explicação ou absorção desses resíduos pertence à calibração da versão 0.4.
+
+### Consequências
+
+O histórico permanece auditável e nenhuma hipótese financeira é escondida em uma fórmula de saldo. A projeção continuará bloqueada até a validação e calibração do modelo.
+
+---
+
+# ADR-022
+
+## Vencimento mensal no dia 10
+
+### Status
+
+Aceito
+
+### Decisão
+
+O contrato de referência possui vencimento regular no dia 10 de cada mês. A parcela 360 vence em 10/02/2046; portanto, a validação de sequências mensais deve usar o dia 10 como âncora contratual, salvo se outro contrato informar uma regra diferente.
+
+### Consequências
+
+Eventos fora do dia 10 não são aceitos automaticamente como parcelas regulares na sequência ancorada. Eles continuam preservados como eventos históricos para auditoria.
 
 ---
 

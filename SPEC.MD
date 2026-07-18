@@ -27,7 +27,7 @@ O sistema deverá:
 
 - importar o histórico do contrato
 - validar os dados
-- reconstruir todas as parcelas
+- reconstruir todos os eventos históricos
 - identificar parâmetros financeiros
 - projetar parcelas futuras
 - gerar cenários
@@ -38,7 +38,7 @@ O sistema deverá:
 
 # Entrada
 
-Arquivo CSV.
+Arquivo CSV. Cada linha representa um evento histórico do extrato e não é, necessariamente, uma parcela mensal PRICE.
 
 Colunas obrigatórias:
 
@@ -72,13 +72,23 @@ Prazo:
 
 360 meses
 
-Taxa efetiva anual:
+Vencimento das parcelas:
+
+Dia 10 de cada mês. A parcela 360 vencerá em 10/02/2046.
+
+Taxa efetiva anual de referência:
 
 5.116%
 
-Taxa nominal anual:
+Taxa nominal anual de referência:
 
 4.992%
+
+Marco de parcelas quitadas na emissão do extrato:
+
+125 parcelas (360 meses de prazo original - 235 meses remanescentes).
+
+Para este contrato, as linhas de 10/03/2016 a 10/07/2026 formam uma sequência mensal ancorada: vencimento no dia 10, sem lacunas, saldo devedor positivo, encargos zerados e valor pago igual à prestação. Elas correspondem às parcelas 1 a 125. Seis parcelas de carência, entre junho e novembro de 2020, possuem capital zero e continuam válidas na sequência contratual.
 
 ---
 
@@ -104,110 +114,111 @@ TR = Correção Monetária / Saldo Devedor
 
 Sempre utilizar os dados históricos.
 
-Nunca utilizar TR fixa.
+Quando o saldo devedor for zero, a TR histórica será registrada como não definida. Nunca utilizar TR fixa para substituir uma observação não definida.
 
 ---
 
-# Reconstrução
+# Reconstrução histórica
 
-Cada parcela deverá possuir:
+Cada evento histórico deverá preservar os valores reportados:
 
-Data
+- Data
+- Saldo Devedor
+- Correção Monetária
+- Saldo Atualizado
+- Prestação
+- Capital
+- Juros
+- Acessórios
+- Correção Prestação
+- Encargos
+- Valor Pago
 
-Saldo Inicial
+A reconstrução também deverá acrescentar, sem sobrescrever os valores reportados:
 
-Correção Monetária
-
-Saldo Corrigido
-
-Juros
-
-Amortização
-
-Prestação
-
-Saldo Final
+- taxa mensal calculada;
+- TR histórica, quando definida;
+- amortização reportada;
+- juros estimados;
+- resíduo da prestação;
+- saldo teórico sem ajustes;
+- ajuste de saldo não classificado.
 
 ---
 
-# Ordem dos cálculos
+# Ordem da reconstrução
 
-Para cada parcela:
+Para cada evento:
 
-Saldo Inicial
-
-↓
-
-Correção TR
+Valores reportados pelo extrato
 
 ↓
 
-Saldo Corrigido
+Taxa mensal e TR histórica, quando aplicável
 
 ↓
 
-Juros
+Amortização reportada pelo campo Capital
 
 ↓
 
-Prestação
+Juros estimados e componentes conhecidos da prestação
 
 ↓
 
-Amortização
+Diagnósticos de resíduo da prestação e ajuste de saldo
 
-↓
-
-Saldo Final
+O fluxo não calcula nem substitui um saldo final histórico. O `Saldo Atualizado` do extrato permanece autoritativo até que a calibração explique os ajustes observados.
 
 ---
 
 # Fórmulas
 
-## Juros
+## Juros estimados
 
-Juros = Saldo Corrigido × taxa_mensal
+Juros estimados = Saldo Devedor × taxa_mensal
 
----
-
-## Amortização
-
-Amortização = Prestação - Juros
+O resultado é diagnóstico. `Juros` é o valor histórico autoritativo; diferenças podem decorrer de critérios do contrato ainda não calibrados, como datas de apropriação e períodos especiais.
 
 ---
 
-## Saldo Final
+## Amortização histórica
 
-Saldo Final = Saldo Corrigido - Amortização
+Amortização reportada = Capital
+
+O campo `Capital` do extrato é a fonte autoritativa da amortização histórica. A diferença entre prestação e seus componentes conhecidos é registrada como resíduo; ela não deve ser absorvida artificialmente na amortização.
+
+---
+
+## Saldo teórico sem ajustes
+
+Saldo teórico sem ajustes = Saldo Devedor + Correção Monetária - Capital
+
+Esse cálculo é somente um diagnóstico. `Saldo Atualizado` é o valor autoritativo do histórico, pois o extrato pode conter liberações, períodos de carência e outros ajustes não classificados.
+
+## Ajuste de saldo não classificado
+
+Ajuste = Saldo Atualizado - Saldo teórico sem ajustes
 
 ---
 
 # Calibração
 
-O sistema deverá reconstruir todas as parcelas históricas.
+O sistema deverá classificar os eventos antes de calibrar o modelo. Eventos com saldo devedor zero, encargos de inadimplência, capital zero ou ajuste de saldo relevante poderão permanecer no relatório histórico, mas não devem ser usados automaticamente como amostra de uma parcela PRICE regular.
 
-Após reconstrução deverá comparar:
+Os critérios iniciais são configuráveis e classificam como elegível apenas o evento com saldo devedor positivo, capital positivo, sem encargos, ajuste de saldo de até R$ 25,00 e resíduo de prestação de até 1%. Resíduos superiores são classificados como componente não identificado. Os demais eventos são mantidos no relatório com o motivo da exclusão.
 
-Prestação calculada
+A validade da parcela e a elegibilidade de calibração são conceitos distintos. A sequência mensal ancorada identifica parcelas reais do contrato; o filtro de calibração continua conservador enquanto os componentes não identificados não forem explicados.
 
-×
+Após a classificação, a calibração deverá comparar os valores calculados com os valores reportados, sem sobrescrever o extrato. Os parâmetros ajustáveis, os critérios de inclusão e as tolerâncias serão registrados no relatório de calibração.
 
-Prestação real
-
-Saldo calculado
-
-×
-
-Saldo real
-
-Caso o erro ultrapasse a tolerância definida,
-os parâmetros deverão ser recalibrados.
+Nesta etapa, a taxa efetiva anual contratual é preservada. A calibração mede os desvios e não altera automaticamente o contrato quando a amostra indicar eventos ou componentes ainda não explicados.
 
 ---
 
 # Critérios de aceitação
 
-Erro máximo:
+Os limites abaixo serão aplicados apenas aos eventos elegíveis para calibração:
 
 Prestação
 

@@ -20,29 +20,30 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ## Projeto
 
-- [ ] Criar estrutura de diretórios
-- [ ] Configurar ambiente virtual
-- [ ] Criar pyproject.toml
-- [ ] Criar requirements.txt
-- [ ] Configurar Ruff
-- [ ] Configurar Black
-- [ ] Configurar MyPy
-- [ ] Configurar PyTest
-- [ ] Configurar Logging
-- [ ] Criar arquivo config.py
+- [x] Configurar `uv` e Python 3.13
+- [x] Criar `pyproject.toml` e `uv.lock`
+- [x] Adicionar configuração inicial de pre-commit
+- [x] Registrar os dados de referência
+- [x] Criar estrutura de pacotes da aplicação
+- [x] Configurar PyTest para a aplicação
+- [x] Configurar MyPy e stubs necessários
+- [ ] Configurar logging
 
 ---
 
-# Fase 1 — Importação
+# Fase 1 — Importação (versão 0.2)
 
 ## CSV
 
-- [ ] Ler CSV
-- [ ] Validar colunas obrigatórias
-- [ ] Validar datas
-- [ ] Validar valores
-- [ ] Converter números brasileiros
-- [ ] Criar DataFrame limpo
+- [x] Ler CSV
+- [x] Validar colunas obrigatórias
+- [x] Validar datas
+- [x] Validar valores
+- [x] Converter números brasileiros
+- [x] Criar DataFrame limpo
+- [x] Garantir que a leitura não altere o arquivo de origem
+- [x] Criar exceções de validação específicas
+- [x] Cobrir leitor e validações com testes unitários
 
 ---
 
@@ -59,8 +60,8 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ## Taxas
 
-- [ ] Calcular taxa mensal
-- [ ] Calcular TR histórica
+- [x] Calcular taxa mensal
+- [x] Calcular TR histórica
 - [ ] Calcular média móvel da TR
 - [ ] Calcular TR personalizada
 
@@ -68,29 +69,31 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ## PRICE
 
-- [ ] Calcular juros
-- [ ] Calcular amortização
-- [ ] Calcular saldo final
-- [ ] Validar prestação
+- [x] Calcular juros estimados para diagnóstico
+- [x] Registrar amortização reportada pelo campo Capital
+- [x] Calcular saldo teórico e ajuste não classificado
+- [x] Validar componentes conhecidos da prestação por resíduo
 
 ---
 
 ## Histórico
 
-- [ ] Reconstruir parcelas históricas
-- [ ] Comparar saldo
-- [ ] Comparar juros
-- [ ] Comparar amortização
-- [ ] Calcular erro percentual
+- [x] Reconstruir eventos históricos
+- [x] Comparar saldo por ajuste não classificado
+- [x] Comparar juros por diferença estimada
+- [x] Registrar amortização reportada
+- [ ] Calcular erro percentual após a calibração
 
 ---
 
 # Fase 3 — Calibração
 
-- [ ] Ajustar parâmetros
-- [ ] Minimizar erro
-- [ ] Validar tolerâncias
-- [ ] Gerar relatório de calibração
+- [x] Classificar eventos elegíveis e não elegíveis
+- [x] Classificar resíduos relevantes como componente não identificado
+- [x] Identificar a sequência ancorada de parcelas válidas 1–125
+- [x] Gerar resumo com erros percentuais e tolerâncias
+- [x] Registrar motivos de exclusão no relatório de calibração
+- [ ] Calibração avançada: ajustar parâmetros após explicar componentes pendentes
 
 ---
 
@@ -106,12 +109,12 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Fase 5 — Relatórios
 
-- [ ] Resumo financeiro
-- [ ] Economia de juros
-- [ ] Data de quitação
-- [ ] Total restante
-- [ ] Relatório Markdown
-- [ ] Relatório TXT
+- [x] Resumo financeiro
+- [ ] Economia de juros com cenário de amortização
+- [x] Data de quitação
+- [x] Total restante
+- [x] Relatório Markdown
+- [x] Relatório TXT
 
 ---
 

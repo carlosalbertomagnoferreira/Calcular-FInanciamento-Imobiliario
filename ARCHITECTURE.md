@@ -26,15 +26,17 @@ Cada módulo deverá possuir responsabilidade única.
 
 ---
 
-# Estrutura do Projeto
+# Estrutura-alvo do Projeto
+
+Esta é a estrutura a ser criada progressivamente a partir da versão 0.2; ela ainda não representa os arquivos existentes no repositório.
 
 financiamento_bb/
 
 ```
 ├── main.py
-├── config.py
-├── requirements.txt
-├── README.md
+├── pyproject.toml
+├── uv.lock
+├── README.MD
 ├── SPEC.md
 ├── AGENT.md
 ├── ARCHITECTURE.md
