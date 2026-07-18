@@ -11,5 +11,8 @@ class ResumoFinanceiro:
     total_restante_projetado: Decimal
     total_juros_historico: Decimal
     total_juros_projetado: Decimal
+    data_ultima_parcela_paga: date
+    valor_ultima_parcela_paga: Decimal
+    data_proxima_parcela: date
     data_quitacao: date
     proxima_prestacao: Decimal

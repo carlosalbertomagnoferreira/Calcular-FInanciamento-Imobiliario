@@ -7,6 +7,7 @@ import typer
 
 from simulador import (
     criar_cenario_padrao,
+    exportar_projecao_csv,
     gerar_resumo_financeiro,
     identificar_parcelas_validas,
     ler_extrato_csv,
@@ -54,6 +55,9 @@ def validar(csv: Path = typer.Option(Path("extrato.csv"), "--csv")) -> None:
 def projetar(
     csv: Path = typer.Option(Path("extrato.csv"), "--csv"),
     tr: str | None = typer.Option(None, "--tr", help="TR mensal decimal do cenário."),
+    saida: Path | None = typer.Option(
+        None, "--saida", help="Caminho do CSV para exportar a projeção."
+    ),
 ) -> None:
     """Projeta as parcelas restantes do contrato."""
     historico = _historico(csv)
@@ -66,7 +70,13 @@ def projetar(
         f"Projeção: parcelas {primeira['Número da Parcela']} a {ultima['Número da Parcela']}."
     )
     typer.echo(f"Quitação prevista: {ultima['Data']:%d/%m/%Y}.")
-    typer.echo(f"Próxima prestação: R$ {primeira['Prestação']:.2f}.")
+    typer.echo(
+        f"Próxima prestação: {primeira['Data']:%d/%m/%Y} — "
+        f"R$ {primeira['Prestação']:.2f}."
+    )
+    if saida is not None:
+        caminho = exportar_projecao_csv(projecao, saida)
+        typer.echo(f"Projeção exportada para: {caminho}.")
 
 
 @app.command()

@@ -26,6 +26,32 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 - Classificação explícita de componentes de prestação não identificados
 - Identificação ancorada das parcelas válidas 1 a 125
 
+## Changed
+
+- Cenário padrão de projeção passou a usar a média das últimas 12 TRs válidas
+
+## [0.6.0] - Relatórios
+
+### Added
+
+- CLI com comandos para validar o extrato, projetar parcelas e gerar relatórios
+- Relatórios em Markdown e texto simples com saldo, totais, juros, próxima prestação e quitação
+
+### Changed
+
+- Economia de juros explicitamente adiada para os cenários de amortização
+
+## [0.4.0] - Calibração
+
+### Added
+
+- Classificação de eventos elegíveis e motivos de exclusão auditáveis
+- Métricas de erros de juros, prestação e saldo
+
+### Deferred
+
+- Calibração avançada, dependente da explicação dos componentes pendentes
+
 ## [0.3.0] - Reconstrução Histórica
 
 ### Added
@@ -40,8 +66,8 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 ### Added
 
-- Cenário de projeção com TR média histórica ou personalizada
-- Projeção das parcelas 126 a 360 até 10/02/2046
+- Cenário de projeção com TR personalizada ou média das TRs históricas válidas
+- Projeção das parcelas 126 a 360 até 10/02/2046, exportável em CSV
 
 ## [0.2.0] - Importação do Extrato
 

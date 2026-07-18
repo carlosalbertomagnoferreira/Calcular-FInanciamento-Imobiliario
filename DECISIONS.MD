@@ -71,7 +71,7 @@ O PDF de referência é a fonte primária do extrato. O CSV gerado a partir dele
 
 Nenhum dos dois arquivos de referência pode ser alterado pela aplicação. Toda transformação deverá ocorrer sobre cópias em memória ou em arquivos de saída distintos.
 
-O `extrator2.py` é uma prova de conceito e não integra a aplicação; o extrator definitivo será implementado em fase futura sem sobrescrever os arquivos de referência.
+A extração definitiva do PDF será implementada em fase futura sem sobrescrever os arquivos de referência.
 
 ---
 

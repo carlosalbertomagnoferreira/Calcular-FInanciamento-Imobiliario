@@ -10,6 +10,7 @@ from simulador.calculos import calcular_taxa_mensal
 from simulador.parcelas import COLUNA_NUMERO_PARCELA, COLUNA_PARCELA_VALIDA
 
 CENTAVO = Decimal("0.01")
+JANELA_TR_PADRAO = 12
 
 
 def criar_cenario_padrao(
@@ -17,7 +18,7 @@ def criar_cenario_padrao(
     parcelas_restantes: int = 235,
     tr_mensal: Decimal | None = None,
 ) -> CenarioProjecao:
-    """Cria o cenário padrão com a última parcela válida e a TR média histórica."""
+    """Cria o cenário padrão com a média móvel das últimas 12 TRs válidas."""
     validas = historico.loc[historico[COLUNA_PARCELA_VALIDA]].sort_values("Data")
     if validas.empty:
         raise ValueError("Não há parcelas válidas para iniciar a projeção.")
@@ -36,7 +37,8 @@ def criar_cenario_padrao(
         tr_mensal=(
             tr_mensal
             if tr_mensal is not None
-            else sum(tr_observadas, Decimal(0)) / len(tr_observadas)
+            else sum(tr_observadas[-JANELA_TR_PADRAO:], Decimal(0))
+            / len(tr_observadas[-JANELA_TR_PADRAO:])
         ),
         acessorios_mensais=ultima["Acessórios"],
     )

@@ -62,8 +62,8 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 - [x] Calcular taxa mensal
 - [x] Calcular TR histórica
-- [ ] Calcular média móvel da TR
-- [ ] Calcular TR personalizada
+- [x] Calcular média móvel da TR
+- [x] Calcular TR personalizada
 
 ---
 
@@ -99,18 +99,18 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Fase 4 — Projeção
 
-- [ ] Projetar parcelas restantes
-- [ ] Calcular saldo futuro
-- [ ] Calcular juros futuros
-- [ ] Calcular amortização futura
-- [ ] Exportar CSV
+- [x] Projetar parcelas restantes
+- [x] Calcular saldo futuro
+- [x] Calcular juros futuros
+- [x] Calcular amortização futura
+- [x] Exportar CSV
 
 ---
 
 # Fase 5 — Relatórios
 
 - [x] Resumo financeiro
-- [ ] Economia de juros com cenário de amortização
+- [ ] Economia de juros com cenário de amortização (versão 0.8)
 - [x] Data de quitação
 - [x] Total restante
 - [x] Relatório Markdown
@@ -158,9 +158,9 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Fase 8 — CLI
 
-- [ ] Comando projetar
+- [x] Comando projetar
 - [ ] Comando amortizar
-- [ ] Comando relatorio
+- [x] Comando relatorio
 - [ ] Comando graficos
 - [ ] Comando comparar
 
@@ -203,8 +203,8 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 - [ ] CSV
 - [ ] Reconstrução
-- [ ] Projeção
-- [ ] Relatórios
+- [x] Projeção
+- [x] Relatórios
 
 ---
 

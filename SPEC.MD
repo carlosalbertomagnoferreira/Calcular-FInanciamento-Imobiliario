@@ -239,13 +239,8 @@ Juros
 Após validação do histórico,
 projetar todas as parcelas restantes.
 
-O modelo deverá utilizar:
-
-TR média
-
-ou
-
-TR personalizada.
+O cenário padrão utilizará a média aritmética das últimas 12 TRs históricas
+válidas das parcelas contratuais. Uma TR mensal personalizada poderá substituí-la.
 
 ---
 
@@ -253,7 +248,7 @@ TR personalizada.
 
 Suportar:
 
-TR média histórica
+TR média móvel das últimas 12 observações válidas
 
 TR fixa
 
@@ -321,7 +316,7 @@ Nova data de quitação
 
 # Arquivos gerados
 
-dados/projecao.csv
+O caminho informado em `projetar --saida`, por exemplo `dados/projecao.csv`.
 
 dados/relatorio.csv
 

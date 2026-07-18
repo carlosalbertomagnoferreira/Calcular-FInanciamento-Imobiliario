@@ -8,9 +8,9 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 # Estado atual
 
-O projeto está na versão 0.5. A importação, validação, reconstrução histórica e projeção de parcelas futuras estão disponíveis. `main.py` continua sendo apenas o arquivo inicial criado pelo `uv`; uma interface de linha de comando será criada em etapa posterior.
+O projeto está na versão 0.6. A importação, validação, reconstrução histórica, projeção e relatórios em Markdown ou texto simples estão disponíveis pela linha de comando.
 
-A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e oferece TR média histórica ou personalizada. Relatórios, gráficos e amortizações são funcionalidades planejadas para versões posteriores.
+A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e amortizações são funcionalidades planejadas para versões posteriores.
 
 ---
 
@@ -18,7 +18,7 @@ A reconstrução histórica preserva os valores reportados pelo banco e expõe d
 
 `extrato319405086.pdf` é o extrato-base original. `extrato.csv` é o CSV de referência do projeto.
 
-Esses arquivos não devem ser alterados pela aplicação. O `extrator2.py` é apenas uma prova de conceito; o extrator definitivo será implementado posteriormente como um componente próprio, sem sobrescrever os dados de referência.
+Esses arquivos não devem ser alterados pela aplicação. A extração definitiva do PDF será implementada posteriormente como um componente próprio, sem sobrescrever os dados de referência.
 
 ---
 
@@ -66,6 +66,12 @@ Projetar as parcelas restantes:
 uv run python main.py projetar
 ```
 
+Para também salvar a projeção em um CSV compatível com planilhas brasileiras:
+
+```bash
+uv run python main.py projetar --saida projecao.csv
+```
+
 Gerar relatório em Markdown ou texto simples:
 
 ```bash
@@ -77,7 +83,7 @@ uv run python main.py relatorio --formato txt
 
 # Roadmap
 
-O roadmap detalhado está em [ROADMAP.md](ROADMAP.md). A próxima versão será a 0.4: calibração do modelo contra o histórico.
+O roadmap detalhado está em [ROADMAP.md](ROADMAP.md). As próximas evoluções incluem calibração avançada, gráficos e cenários de amortização.
 
 ---
 

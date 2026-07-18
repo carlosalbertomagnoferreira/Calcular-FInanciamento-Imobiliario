@@ -173,11 +173,9 @@ Projetar todas as parcelas futuras.
 
 ### Entregas
 
-Gerar:
+Gerar DataFrame de projeção com cenário padrão de média das últimas 12 TRs válidas ou TR personalizada.
 
-projecao.csv
-
-Gerar DataFrame de projeção com cenário de TR média histórica ou TR personalizada.
+Permitir a exportação opcional do resultado em CSV pelo comando `projetar --saida`.
 
 ### Informações
 
@@ -214,7 +212,7 @@ Total pago.
 
 Total restante.
 
-Economia de juros.
+Economia de juros (entrega da versão 0.8, quando houver cenário de amortização para comparação).
 
 Data prevista de quitação.
 

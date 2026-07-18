@@ -159,15 +159,17 @@ O sistema deverá suportar:
 
 # Linha de comando
 
-O projeto utilizará Typer quando a CLI for implementada. Na versão 0.1, `main.py` é apenas o bootstrap criado pelo `uv`.
+O projeto utiliza Typer na CLI. Os comandos `validar`, `projetar` e `relatorio`
+estão disponíveis; os demais serão entregues nas fases correspondentes.
 
 Exemplos:
 
 uv run python main.py projetar
 
-uv run python main.py amortizar --valor 10000
+uv run python main.py relatorio
 
-Esses comandos são o contrato previsto para a CLI; não estão disponíveis antes das fases correspondentes do roadmap.
+O comando `projetar` aceita `--saida` para exportar o CSV da projeção.
+Os comandos de amortização serão disponibilizados na versão 0.8.
 
 ---
 
