@@ -284,26 +284,54 @@ data final de `--ate`.
 
 Transformar projeções em informações acionáveis para decisão financeira.
 
-### Entregas
+Para reduzir risco e permitir entregas incrementais, a versão será executada em
+quatro subfases. As fases 0.9.2 e 0.9.3 poderão ser desenvolvidas em paralelo
+após a consolidação da base compartilhada da 0.9.1.
+
+### 0.9.1 — Base de estratégias
+
+- Consolidar o modelo de estratégia de amortização, frequência e agenda de
+  aportes.
+- Fazer `amortizar` e `comparar` consumirem as mesmas regras de criação,
+  normalização e validação da agenda.
+- Remover duplicações de regras de negócio e ampliar os testes dessa base.
+
+### 0.9.2 — Comparação de cenários
 
 - Comparar o cenário-base e múltiplas estratégias de amortização em uma tabela.
 - Informar aporte total, juros economizados, desembolso futuro, quitação, prazo,
   prestação e saldo para cada estratégia.
-- Encontrar, por busca numérica, o menor aporte que atenda a uma meta.
 
-### Metas suportadas
+### 0.9.3 — Meta de quitação
 
-- Quitar até uma data desejada.
-- Reduzir a prestação a um valor máximo.
-- Avaliar aportes únicos, mensais ou anuais.
+- Encontrar, por busca numérica, o menor aporte único, mensal ou anual para
+  quitar até uma data desejada.
+- Retornar resultado nulo quando o cenário-base já atender à meta e uma
+  explicação clara para metas inviáveis.
 
-A meta de prestação considera a primeira parcela posterior ao aporte, incluindo
-os acessórios contratuais.
+### 0.9.4 — Meta de prestação
+
+- Encontrar, por busca numérica, o menor aporte único, mensal ou anual para
+  reduzir a prestação a um valor máximo.
+- Avaliar a primeira parcela posterior ao aporte, incluindo os acessórios
+  contratuais. A prestação da própria data do aporte não é alterada, pois a
+  amortização ocorre após seu pagamento regular.
+- Tratar explicitamente liquidação antecipada e metas inviáveis.
+
+### Dependências de execução
+
+```text
+0.9.1 Base de estratégias
+ ├── 0.9.2 Comparação de cenários
+ └── 0.9.3 Meta de quitação
+       └── 0.9.4 Meta de prestação
+```
 
 ### Critério de aceite
 
-Para uma meta válida, apresentar o aporte mínimo e a projeção resultante. Para
-uma meta inviável, retornar uma explicação clara.
+Cada subfase deverá entregar comandos documentados, testes automatizados e
+saída verificável. Para uma meta válida, apresentar o aporte mínimo e a
+projeção resultante; para uma meta inviável, retornar uma explicação clara.
 
 
 ---

@@ -166,13 +166,36 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Fase 8.1 — Planejamento de metas (versão 0.9)
 
+## 0.9.1 — Base de estratégias
+
+- [ ] Consolidar estratégia, frequência e agenda de amortizações
+- [ ] Reutilizar a base em `amortizar` e `comparar`
+- [ ] Centralizar normalização e validações de datas e recorrências
+- [ ] Cobrir a base compartilhada com testes
+
+## 0.9.2 — Comparação de cenários
+
 - [ ] Comparar múltiplas estratégias de amortização
+- [ ] Exibir aporte, desembolso, juros, quitação, prazo, prestação e saldo
+- [ ] Evoluir o comando `comparar` para cenários múltiplos
+- [ ] Cobrir a comparação com testes
+
+## 0.9.3 — Meta de quitação
+
 - [ ] Calcular aporte mínimo para uma data de quitação-alvo
-- [ ] Calcular aporte mínimo para uma prestação-alvo
-- [ ] Avaliar prestação-alvo na primeira parcela posterior ao aporte, com acessórios
+- [ ] Aceitar estratégias únicas, mensais e anuais
+- [ ] Retornar aporte nulo quando o cenário-base já cumprir a meta
 - [ ] Explicar metas inviáveis
-- [ ] Criar comando `planejar`
-- [ ] Cobrir planejador e cenários múltiplos com testes
+- [ ] Criar a interface inicial do comando `planejar`
+- [ ] Cobrir a busca do aporte mínimo com testes de limite em centavos
+
+## 0.9.4 — Meta de prestação
+
+- [ ] Calcular aporte mínimo para uma prestação-alvo
+- [ ] Avaliar a primeira parcela posterior ao aporte, com acessórios
+- [ ] Tratar liquidação antecipada e metas inviáveis
+- [ ] Reutilizar o mecanismo de busca da meta de quitação
+- [ ] Cobrir meta de prestação e recorrências com testes
 
 ---
 

@@ -303,14 +303,24 @@ após amortizar será reportado na data final indicada em `--ate`.
 
 # Planejamento de metas
 
-O sistema deverá comparar múltiplas estratégias de amortização e apresentar,
-para cada uma, aporte total, desembolso futuro, economia de juros, quitação,
-prazo, próxima prestação e saldo. Também deverá encontrar o menor aporte para
-atingir uma data máxima de quitação ou uma prestação máxima, respeitando a
-frequência e o modo escolhidos. Metas inviáveis deverão produzir erro explícito.
-Para a meta de prestação, o valor avaliado será a primeira prestação posterior
-ao aporte, já incluindo acessórios; a prestação da própria data do aporte não é
-alterada, pois a amortização ocorre após seu pagamento regular.
+O planejamento de metas será entregue em quatro subfases incrementais:
+
+- **0.9.1 — Base de estratégias:** centralizar o modelo de estratégia, a
+  frequência, a criação da agenda e suas validações, reutilizados pelos comandos
+  de amortização e comparação.
+- **0.9.2 — Comparação de cenários:** comparar o cenário-base e múltiplas
+  estratégias, apresentando aporte total, desembolso futuro, economia de juros,
+  quitação, prazo, próxima prestação e saldo.
+- **0.9.3 — Meta de quitação:** encontrar o menor aporte, único, mensal ou
+  anual, que quite o contrato até uma data máxima escolhida.
+- **0.9.4 — Meta de prestação:** encontrar o menor aporte, nas mesmas
+  frequências, que reduza a prestação a um valor máximo.
+
+Metas inviáveis deverão produzir erro explícito. Para a meta de prestação, o
+valor avaliado será a primeira prestação posterior ao aporte, já incluindo
+acessórios; a prestação da própria data do aporte não é alterada, pois a
+amortização ocorre após seu pagamento regular. A meta de prestação reutilizará
+o mecanismo de busca e as regras de estratégia criados nas subfases anteriores.
 
 ---
 

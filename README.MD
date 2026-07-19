@@ -10,7 +10,7 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 O projeto está na versão 0.8. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos e simulações de amortização estão disponíveis pela linha de comando.
 
-A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e cenários de amortização extraordinária estão disponíveis; planejamento de metas e comparação de estratégias são as próximas evoluções previstas.
+A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e cenários de amortização extraordinária estão disponíveis. A próxima versão, 0.9, será entregue em quatro etapas: base de estratégias, comparação de cenários, meta de quitação e meta de prestação.
 
 ---
 
@@ -105,7 +105,7 @@ data final informada em `--ate`.
 
 # Roadmap
 
-A documentação detalhada está em [docs/index.md](docs/index.md). As próximas evoluções incluem calibração avançada e planejamento de metas de amortização.
+A documentação detalhada está em [docs/index.md](docs/index.md). O planejamento de metas de amortização da versão 0.9 está dividido nas subfases 0.9.1 a 0.9.4 no [roadmap](docs/produto/roadmap.md); a calibração avançada permanece como evolução futura.
 
 ---
 
