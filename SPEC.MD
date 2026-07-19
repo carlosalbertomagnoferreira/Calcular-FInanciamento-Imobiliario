@@ -288,6 +288,14 @@ Mantém prazo.
 
 Reduz valor das prestações.
 
+O modo `parcelas` é um alias de `prestacao` na CLI.
+
+As amortizações são aplicadas após a prestação regular da data informada. O
+cenário com amortização deverá informar a economia de juros frente à projeção
+original. Em redução de prazo, deverá informar o saldo antes e após o aporte e
+o prazo abatido; em redução de prestação, deverá comparar as cinco próximas
+prestações com e sem amortização.
+
 ---
 
 # Relatórios
@@ -320,13 +328,17 @@ O caminho informado em `projetar --saida`, por exemplo `dados/projecao.csv`.
 
 dados/relatorio.csv
 
-graficos/saldo.png
+graficos/saldo_devedor.png
 
-graficos/prestacoes.png
+graficos/prestacao.png
+
+graficos/tr.png
 
 graficos/juros.png
 
 graficos/amortizacao.png
+
+graficos/evolucao_contrato.png
 
 relatorio.txt
 

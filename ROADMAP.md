@@ -221,6 +221,8 @@ Data prevista de quitação.
 # Versão 0.7
 ## Gráficos
 
+Status: concluída.
+
 ### Objetivos
 
 Visualização.
@@ -239,10 +241,14 @@ Amortização.
 
 Evolução do contrato.
 
+Os seis gráficos são exportados em PNG pelo comando `graficos --diretorio`.
+
 ---
 
 # Versão 0.8
 ## Simulação de Amortizações
+
+Status: concluída.
 
 ### Objetivos
 
@@ -263,6 +269,11 @@ Mensal.
 Anual.
 
 Programado.
+
+O comando `amortizar` compara o cenário original e o amortizado, informando
+juros economizados. No modo de prazo, também informa saldo antes e após o aporte
+e o prazo abatido; nos modos de prestação e parcelas, compara as cinco próximas
+prestações.
 
 ---
 

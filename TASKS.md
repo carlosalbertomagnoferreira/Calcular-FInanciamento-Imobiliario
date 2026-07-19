@@ -110,7 +110,7 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 # Fase 5 — Relatórios
 
 - [x] Resumo financeiro
-- [ ] Economia de juros com cenário de amortização (versão 0.8)
+- [x] Economia de juros com cenário de amortização
 - [x] Data de quitação
 - [x] Total restante
 - [x] Relatório Markdown
@@ -120,12 +120,12 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Fase 6 — Gráficos
 
-- [ ] Saldo devedor
-- [ ] Prestação
-- [ ] Juros
-- [ ] Amortização
-- [ ] TR
-- [ ] Evolução do contrato
+- [x] Saldo devedor
+- [x] Prestação
+- [x] Juros
+- [x] Amortização
+- [x] TR
+- [x] Evolução do contrato
 
 ---
 
@@ -133,35 +133,35 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ## Redução de Prazo
 
-- [ ] Implementar algoritmo
-- [ ] Validar cálculos
-- [ ] Testar cenários
+- [x] Implementar algoritmo
+- [x] Validar cálculos
+- [x] Testar cenários
 
 ---
 
 ## Redução da Prestação
 
-- [ ] Implementar algoritmo
-- [ ] Validar cálculos
-- [ ] Testar cenários
+- [x] Implementar algoritmo
+- [x] Validar cálculos
+- [x] Testar cenários
 
 ---
 
 ## Cenários
 
-- [ ] Amortização única
-- [ ] Amortização mensal
-- [ ] Amortização anual
-- [ ] Calendário de amortizações
+- [x] Amortização única
+- [x] Amortização mensal
+- [x] Amortização anual
+- [x] Calendário de amortizações
 
 ---
 
 # Fase 8 — CLI
 
 - [x] Comando projetar
-- [ ] Comando amortizar
+- [x] Comando amortizar
 - [x] Comando relatorio
-- [ ] Comando graficos
+- [x] Comando graficos
 - [ ] Comando comparar
 
 ---

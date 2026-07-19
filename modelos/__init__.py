@@ -12,10 +12,13 @@ from modelos.relatorio import ResumoFinanceiro
 
 __all__ = [
     "ClassificacaoEvento",
+    "AmortizacaoExtraordinaria",
     "CriteriosCalibracao",
     "CriteriosParcelasValidas",
     "CenarioProjecao",
     "EventoHistorico",
+    "ModoAmortizacao",
     "ResumoCalibracao",
     "ResumoFinanceiro",
 ]
+from modelos.amortizacao import AmortizacaoExtraordinaria, ModoAmortizacao

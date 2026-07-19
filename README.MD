@@ -8,7 +8,7 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 # Estado atual
 
-O projeto está na versão 0.6. A importação, validação, reconstrução histórica, projeção e relatórios em Markdown ou texto simples estão disponíveis pela linha de comando.
+O projeto está na versão 0.8. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos e simulações de amortização estão disponíveis pela linha de comando.
 
 A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e amortizações são funcionalidades planejadas para versões posteriores.
 
@@ -79,11 +79,27 @@ uv run python main.py relatorio
 uv run python main.py relatorio --formato txt
 ```
 
+Gerar os seis gráficos do histórico e da projeção:
+
+```bash
+uv run python main.py graficos --diretorio graficos
+```
+
+Simular uma amortização extraordinária com redução de prazo ou de prestação:
+
+```bash
+uv run python main.py amortizar --valor 10000 --data 2026-08-10 --modo prazo
+uv run python main.py amortizar --valor 10000 --data 2026-08-10 --modo parcelas
+```
+
+Para aportes recorrentes, use `--frequencia mensal` ou `--frequencia anual` com
+`--ate`. Para uma agenda programada, repita `--amortizacao AAAA-MM-DD:VALOR`.
+
 ---
 
 # Roadmap
 
-O roadmap detalhado está em [ROADMAP.md](ROADMAP.md). As próximas evoluções incluem calibração avançada, gráficos e cenários de amortização.
+O roadmap detalhado está em [ROADMAP.md](ROADMAP.md). As próximas evoluções incluem calibração avançada e comparação de cenários.
 
 ---
 

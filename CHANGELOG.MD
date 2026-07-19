@@ -30,6 +30,21 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 - Cenário padrão de projeção passou a usar a média das últimas 12 TRs válidas
 
+## [0.8.0] - Simulação de Amortizações
+
+### Added
+
+- Amortizações únicas, mensais, anuais e programadas
+- Modos de redução de prazo, prestação e alias `parcelas`
+- Comparação de juros, prazo, saldo e próximas prestações entre os cenários
+
+## [0.7.0] - Gráficos
+
+### Added
+
+- Comando CLI para gerar gráficos em PNG
+- Gráficos de saldo devedor, prestação, TR, juros, amortização e evolução do contrato
+
 ## [0.6.0] - Relatórios
 
 ### Added
