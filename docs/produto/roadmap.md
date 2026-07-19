@@ -1,7 +1,7 @@
 # Roadmap
 ## Simulador de Financiamento Imobiliário Banco do Brasil
 
-Versão do documento: 1.0
+Versão do documento: 1.2
 
 ---
 
@@ -415,24 +415,33 @@ Simulação
 
 ---
 
-# Versão 1.2
+# Versão 1.2 — concluída
 ## Dashboard
 
 Tecnologia
 
 Streamlit
 
-### Recursos
+### 1.2.1 — Fundação e upload — concluída
 
-Upload PDF.
+- Tela Streamlit para upload exclusivo de CSV ou PDF.
+- Arquivos temporários, sem substituir as fontes de referência.
+- Validação e mensagens de erro acionáveis.
 
-Upload CSV.
+### 1.2.2 — Análise básica — concluída
 
-Simulação.
+- Projeção, relatório financeiro e seis gráficos.
 
-Gráficos.
+### 1.2.3 — Downloads e acabamento — concluída
 
-Download.
+- Download da projeção CSV e do relatório.
+- Testes e documentação da interface.
+
+### 1.2.4 — Simulações avançadas — concluída
+
+- Amortização e comparação de estratégias na interface.
+- Planejamento de metas de quitação e prestação, incluindo aportes únicos ou
+  recorrentes e a projeção recalculada.
 
 ---
 

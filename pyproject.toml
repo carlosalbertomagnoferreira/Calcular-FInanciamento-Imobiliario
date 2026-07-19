@@ -1,6 +1,6 @@
 [project]
 name = "calcular-financiamento-apartamento"
-version = "1.0.0"
+version = "1.2.0"
 description = "Simulador de financiamento imobiliário do Banco do Brasil"
 readme = "README.MD"
 requires-python = ">=3.13"

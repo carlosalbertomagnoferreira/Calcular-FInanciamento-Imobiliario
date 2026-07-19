@@ -222,14 +222,31 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ---
 
-# Fase 10 — Dashboard
+# Fase 10 — Dashboard (versão 1.2)
 
-- [ ] Upload PDF
-- [ ] Upload CSV
-- [ ] Simulação
-- [ ] Download CSV
-- [ ] Download Relatório
-- [ ] Dashboard Streamlit
+## 1.2.1 — Fundação e upload
+
+- [x] Criar dashboard Streamlit
+- [x] Upload exclusivo de PDF ou CSV
+- [x] Isolar uploads em arquivos temporários
+- [x] Validar entradas e exibir erros acionáveis
+
+## 1.2.2 — Análise básica
+
+- [x] Exibir projeção e relatório financeiro
+- [x] Exibir gráficos
+
+## 1.2.3 — Downloads e acabamento
+
+- [x] Download CSV
+- [x] Download Relatório
+- [x] Documentar e testar a interface
+
+## 1.2.4 — Simulações avançadas
+
+- [x] Amortização
+- [x] Comparação de estratégias
+- [x] Planejamento por metas
 
 ---
 

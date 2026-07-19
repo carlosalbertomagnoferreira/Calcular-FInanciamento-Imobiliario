@@ -1,7 +1,7 @@
 # Especificação Funcional
 ## Simulador de Financiamento Imobiliário Banco do Brasil
 
-Versão: 1.0
+Versão: 1.2
 
 ---
 
@@ -415,23 +415,20 @@ O comando global `--log-level` aceita os níveis `DEBUG`, `INFO`, `WARNING` e
 
 # Dashboard
 
-Versão futura.
+Versão 1.2, concluída.
 
 Tecnologia:
 
 Streamlit
 
-Permitirá:
+Permite upload exclusivo de um PDF textual ou CSV, processado em diretório
+temporário e validado pelo mesmo fluxo da CLI. Após a validação, exibe o
+resumo, a projeção, seis gráficos e downloads de CSV e relatório em Markdown.
 
-Upload PDF
-
-Upload CSV
-
-Comparação de cenários
-
-Gráficos interativos
-
-Download dos resultados
+As simulações avançadas aceitam aportes únicos, mensais ou anuais, nos modos
+de prazo e prestação. O planejamento de metas calcula o aporte mínimo para
+quitação ou prestação; em metas de quitação, exibe as parcelas recalculadas até
+a data-alvo.
 
 ---
 

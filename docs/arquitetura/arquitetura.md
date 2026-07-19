@@ -6,7 +6,7 @@ Simulador de Financiamento Imobiliário Banco do Brasil
 
 Versão:
 
-1.0
+1.2
 
 ---
 
@@ -26,7 +26,7 @@ Cada módulo deverá possuir responsabilidade única.
 
 # Estrutura atual do Projeto
 
-A estrutura abaixo representa a organização entregue até a versão 1.0. Os
+A estrutura abaixo representa a organização entregue até a versão 1.2. Os
 arquivos de referência `extrato.csv` e `extrato319405086.pdf` permanecem na
 raiz e não são modificados pela aplicação.
 
@@ -34,6 +34,7 @@ calcular_financiamento_apartamento/
 
 ```
 ├── main.py
+├── dashboard.py
 ├── pyproject.toml
 ├── uv.lock
 ├── README.MD
@@ -44,6 +45,8 @@ calcular_financiamento_apartamento/
 ├── simulador/
 │   ├── __init__.py
 │   ├── leitor.py
+│   ├── entrada.py
+│   ├── analise.py
 │   ├── reconstrucao.py
 │   ├── parcelas.py
 │   ├── calibracao.py

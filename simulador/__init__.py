@@ -1,6 +1,7 @@
 """Componentes do simulador de financiamento imobiliário."""
 
 from simulador.calibracao import calibrar_historico
+from simulador.analise import preparar_analise
 from simulador.comparacao import comparar_estrategias, comparar_projecoes
 from simulador.amortizacao import (
     gerar_amortizacoes_recorrentes,
@@ -8,7 +9,8 @@ from simulador.amortizacao import (
     normalizar_data_amortizacao,
     projetar_com_amortizacoes,
 )
-from simulador.exportacao import exportar_projecao_csv
+from simulador.exportacao import exportar_projecao_csv, serializar_projecao_csv
+from simulador.entrada import ler_extrato_enviado
 from simulador.extrator_pdf import converter_pdf_para_csv, extrair_extrato_pdf
 from simulador.graficos import criar_graficos, exportar_graficos
 from simulador.leitor import ler_extrato_csv
@@ -32,12 +34,15 @@ from simulador.reconstrucao import reconstruir_historico
 
 __all__ = [
     "calibrar_historico",
+    "preparar_analise",
     "comparar_projecoes",
     "comparar_estrategias",
     "gerar_amortizacoes_recorrentes",
     "criar_agenda_estrategia",
     "normalizar_data_amortizacao",
     "exportar_projecao_csv",
+    "serializar_projecao_csv",
+    "ler_extrato_enviado",
     "extrair_extrato_pdf",
     "converter_pdf_para_csv",
     "criar_graficos",

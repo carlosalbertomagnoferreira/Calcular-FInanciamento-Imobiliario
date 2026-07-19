@@ -10,27 +10,21 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 # [Unreleased]
 
+---
+
+# [1.2.0] - 2026-07-19
+
 ## Added
 
 - Conversão de extrato PDF textual para CSV validado pelo comando `extrair-pdf`
-
-- Estrutura inicial do projeto
-- Documentação arquitetural
-- Especificação funcional
-- Roadmap
-- Guia de contribuição
-- Backlog técnico
-- Estrutura preparada para reconstrução do financiamento
-- Ambiente padronizado com Python 3.13 e uv
-- Formalização do escopo da versão 0.2
-- Classificação configurável de eventos para calibração
-- Relatório de erros percentuais de juros, prestação e saldo
-- Classificação explícita de componentes de prestação não identificados
-- Identificação ancorada das parcelas válidas 1 a 125
+- Dashboard Streamlit para upload seguro de CSV ou PDF textual, análise,
+  gráficos, downloads e simulações avançadas
+- Planejamento de metas no dashboard com aportes únicos ou recorrentes e
+  visualização da projeção recalculada
 
 ## Changed
 
-- Cenário padrão de projeção passou a usar a média das últimas 12 TRs válidas
+- Documentação revisada para registrar a conclusão da versão 1.2
 
 ## [1.0.0] - 2026-07-19
 

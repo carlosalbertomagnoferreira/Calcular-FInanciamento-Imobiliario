@@ -8,9 +8,17 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 # Estado atual
 
-O projeto está na versão 1.0. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos, simulações de amortização e planejamento por metas estão disponíveis pela linha de comando.
+O projeto está na versão 1.2. A importação, validação, reconstrução histórica,
+projeção, relatórios, gráficos, simulações de amortização e planejamento por
+metas estão disponíveis pela linha de comando. O dashboard Streamlit oferece o
+mesmo fluxo principal por upload de CSV ou PDF textual.
 
-A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. A versão 1.0 consolida estratégias nomeadas, comparação de cenários, planejamento por metas, logging operacional e uma suíte de regressão com cobertura mínima de 90%.
+A reconstrução histórica preserva os valores reportados pelo banco e expõe
+diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e,
+por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal
+personalizada. A versão 1.2 também inclui a conversão de PDF textual para CSV,
+estratégias recorrentes e downloads de resultados no dashboard. A suíte de
+regressão exige cobertura mínima de 90%.
 
 ---
 
@@ -141,9 +149,29 @@ aportes.
 
 ---
 
+# Dashboard
+
+Inicie a interface web local com:
+
+```bash
+uv run streamlit run dashboard.py
+```
+
+Envie um único CSV ou PDF textual do Banco do Brasil. O dashboard valida o
+arquivo sem alterar as fontes de referência e oferece resumo, projeção, seis
+gráficos, download de CSV e relatório em Markdown. Em **Simulações avançadas**
+é possível testar aportes únicos, mensais ou anuais, com redução de prazo ou de
+prestação, e planejar o menor aporte para uma meta de quitação ou prestação.
+Para aportes recorrentes, informe também o último aporte. A tabela do
+planejamento de quitação mostra as parcelas recalculadas até a data-meta.
+
+---
+
 # Roadmap
 
-A documentação detalhada está em [docs/index.md](docs/index.md). A versão 1.0 é a primeira versão estável; a calibração avançada permanece como evolução futura.
+A documentação detalhada está em [docs/index.md](docs/index.md). A versão 1.0 é
+a primeira versão estável; a versão 1.2 consolida o dashboard. A calibração
+avançada permanece como evolução futura.
 
 ---
 

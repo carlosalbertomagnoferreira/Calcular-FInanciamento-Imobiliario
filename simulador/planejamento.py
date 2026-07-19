@@ -97,8 +97,9 @@ def encontrar_aporte_minimo_quitacao(
 
     estrategia_minima = _encontrar_estrategia_minima(
         estrategia,
-        lambda candidata: _data_quitacao(_projetar_estrategia(cenario, candidata))
-        <= meta.data_alvo,
+        lambda candidata: (
+            _data_quitacao(_projetar_estrategia(cenario, candidata)) <= meta.data_alvo
+        ),
     )
     projecao = _projetar_estrategia(cenario, estrategia_minima)
     return ResultadoMetaQuitacao(
@@ -154,10 +155,12 @@ def encontrar_aporte_minimo_prestacao(
 
     estrategia_minima = _encontrar_estrategia_minima(
         estrategia,
-        lambda candidata: obter_prestacao_posterior_ao_aporte(
-            cenario, candidata, _projetar_estrategia(cenario, candidata)
-        ).valor
-        <= meta.valor_maximo,
+        lambda candidata: (
+            obter_prestacao_posterior_ao_aporte(
+                cenario, candidata, _projetar_estrategia(cenario, candidata)
+            ).valor
+            <= meta.valor_maximo
+        ),
     )
     projecao = _projetar_estrategia(cenario, estrategia_minima)
     return ResultadoMetaPrestacao(
