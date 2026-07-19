@@ -25,14 +25,23 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 - Relatório de erros percentuais de juros, prestação e saldo
 - Classificação explícita de componentes de prestação não identificados
 - Identificação ancorada das parcelas válidas 1 a 125
-- Base compartilhada de estratégias, frequências e agendas de amortização para
-  os comandos `amortizar` e `comparar`
-- Comparação de múltiplas estratégias nomeadas, com métricas financeiras
-- Planejamento do aporte mínimo para uma data de quitação-alvo
 
 ## Changed
 
 - Cenário padrão de projeção passou a usar a média das últimas 12 TRs válidas
+
+## [0.9.0] - 2026-07-19
+
+### Added
+
+- Base compartilhada de estratégias, frequências e agendas de amortização para
+  os comandos `amortizar` e `comparar`
+- Comparação de múltiplas estratégias nomeadas, com métricas financeiras
+- Planejamento do aporte mínimo para uma data de quitação-alvo
+- Planejamento do aporte mínimo para uma prestação-alvo, incluindo acessórios
+
+### Changed
+
 - Roadmap da versão 0.9 redefinido para planejamento de metas e estratégias,
   dividido nas subfases 0.9.1 a 0.9.4
 

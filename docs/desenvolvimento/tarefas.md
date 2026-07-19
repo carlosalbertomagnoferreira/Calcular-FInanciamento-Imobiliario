@@ -191,11 +191,25 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ## 0.9.4 — Meta de prestação
 
-- [ ] Calcular aporte mínimo para uma prestação-alvo
-- [ ] Avaliar a primeira parcela posterior ao aporte, com acessórios
-- [ ] Tratar liquidação antecipada e metas inviáveis
-- [ ] Reutilizar o mecanismo de busca da meta de quitação
-- [ ] Cobrir meta de prestação e recorrências com testes
+### 0.9.4.1 — Critério de avaliação
+
+- [x] Avaliar a primeira parcela posterior ao aporte, com acessórios
+- [x] Excluir a prestação da própria data do aporte
+- [x] Considerar R$ 0,00 quando houver liquidação antes da próxima parcela
+
+### 0.9.4.2 — Busca do aporte mínimo
+
+- [x] Calcular aporte mínimo para uma prestação-alvo
+- [x] Reutilizar o mecanismo de busca da meta de quitação
+- [x] Tratar metas já atendidas e entradas inviáveis
+- [x] Cobrir o limite em centavos e as recorrências com testes
+
+### 0.9.4.3 — Interface e validação
+
+- [x] Incluir `--meta-prestacao` no comando `planejar`
+- [x] Exibir alvo, aporte, frequência e prestações comparadas
+- [x] Documentar o uso da meta de prestação
+- [x] Cobrir a CLI com testes
 
 ---
 

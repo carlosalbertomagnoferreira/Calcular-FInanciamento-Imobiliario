@@ -277,7 +277,7 @@ data final de `--ate`.
 
 ---
 
-# Versão 0.9
+# Versão 0.9 — concluída
 ## Planejamento de Metas e Estratégias
 
 ### Objetivos
@@ -309,14 +309,28 @@ após a consolidação da base compartilhada da 0.9.1.
 - Retornar resultado nulo quando o cenário-base já atender à meta e uma
   explicação clara para metas inviáveis.
 
-### 0.9.4 — Meta de prestação
+### 0.9.4 — Meta de prestação — concluída
 
-- Encontrar, por busca numérica, o menor aporte único, mensal ou anual para
-  reduzir a prestação a um valor máximo.
-- Avaliar a primeira parcela posterior ao aporte, incluindo os acessórios
-  contratuais. A prestação da própria data do aporte não é alterada, pois a
-  amortização ocorre após seu pagamento regular.
-- Tratar explicitamente liquidação antecipada e metas inviáveis.
+#### 0.9.4.1 — Critério de avaliação — concluída
+
+- Avaliar a primeira parcela posterior ao primeiro aporte normalizado.
+- Considerar a prestação completa, incluindo acessórios contratuais.
+- Considerar prestação de R$ 0,00 quando o aporte quitar o contrato antes da
+  próxima parcela.
+
+#### 0.9.4.2 — Busca do aporte mínimo — concluída
+
+- Reutilizar a busca numérica em centavos para encontrar o menor aporte único,
+  mensal ou anual que atenda à prestação-alvo.
+- Retornar a prestação-base, a prestação obtida e a data avaliada.
+- Tratar metas já atendidas, liquidação antecipada e entradas inviáveis.
+
+#### 0.9.4.3 — Interface e validação — concluída
+
+- Incluir `--meta-prestacao` no comando `planejar`, de forma exclusiva a
+  `--meta-quitacao`.
+- Exibir alvo, aporte mínimo, frequência, prestação-base e prestação obtida.
+- Documentar o uso e cobrir cenários de CLI e recorrência com testes.
 
 ### Dependências de execução
 

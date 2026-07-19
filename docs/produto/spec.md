@@ -334,6 +334,12 @@ projeção-base já cumprir a meta, deverá retornar aporte de R$ 0,00. Em uma
 estratégia recorrente sem `--ate`, a data-meta também será a data final dos
 aportes.
 
+Na meta de prestação, `planejar --meta-prestacao` receberá o valor máximo e
+será exclusivo de `--meta-quitacao`. A saída informará a primeira prestação
+avaliada após o aporte, o valor sem amortização e o valor obtido. Para uma
+estratégia recorrente, `--ate` continuará obrigatório por não existir uma data
+da meta que determine o encerramento dos aportes.
+
 ---
 
 # Relatórios

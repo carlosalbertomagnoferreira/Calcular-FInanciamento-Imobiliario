@@ -156,7 +156,7 @@ wheels = [
 
 [[package]]
 name = "calcular-financiamento-apartamento"
-version = "0.8.0"
+version = "0.9.0"
 source = { virtual = "." }
 dependencies = [
     { name = "altair" },

@@ -8,9 +8,9 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 # Estado atual
 
-O projeto está na versão 0.8. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos e simulações de amortização estão disponíveis pela linha de comando.
+O projeto está na versão 0.9. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos, simulações de amortização e planejamento por metas estão disponíveis pela linha de comando.
 
-A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e cenários de amortização extraordinária estão disponíveis. A próxima versão, 0.9, será entregue em quatro etapas: base de estratégias, comparação de cenários, meta de quitação e meta de prestação.
+A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. A versão 0.9 adiciona estratégias nomeadas, comparação de cenários e planejamento do aporte mínimo para metas de quitação ou prestação.
 
 ---
 
@@ -114,11 +114,14 @@ Para encontrar o menor aporte que quite o contrato até uma data, use:
 
 ```bash
 uv run python main.py planejar --meta-quitacao 2045-02-10 --data 2026-08-10
+uv run python main.py planejar --meta-prestacao 600 --data 2026-08-10 --modo prestacao
 ```
 
 Em recorrências de planejamento, a data de `--meta-quitacao` também é usada
 como última data do aporte quando `--ate` não for informado. Use `--ate` apenas
-para encerrar os aportes antes da meta.
+para encerrar os aportes antes da meta. Para a meta de prestação recorrente,
+`--ate` é obrigatório, pois não há uma data-meta que determine o fim dos
+aportes.
 
 ---
 

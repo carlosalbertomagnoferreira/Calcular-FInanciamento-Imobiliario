@@ -14,8 +14,12 @@ from simulador.leitor import ler_extrato_csv
 from simulador.parcelas import identificar_parcelas_validas
 from simulador.projecao import criar_cenario_padrao, projetar_contrato
 from simulador.planejamento import (
+    PrestacaoPosteriorAporte,
     ResultadoMetaQuitacao,
+    ResultadoMetaPrestacao,
     encontrar_aporte_minimo_quitacao,
+    encontrar_aporte_minimo_prestacao,
+    obter_prestacao_posterior_ao_aporte,
 )
 from simulador.relatorio import (
     gerar_resumo_financeiro,
@@ -38,9 +42,13 @@ __all__ = [
     "ler_extrato_csv",
     "criar_cenario_padrao",
     "encontrar_aporte_minimo_quitacao",
+    "encontrar_aporte_minimo_prestacao",
+    "obter_prestacao_posterior_ao_aporte",
     "projetar_contrato",
     "projetar_com_amortizacoes",
     "ResultadoMetaQuitacao",
+    "ResultadoMetaPrestacao",
+    "PrestacaoPosteriorAporte",
     "gerar_resumo_financeiro",
     "renderizar_relatorio_markdown",
     "renderizar_relatorio_txt",

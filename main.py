@@ -14,6 +14,7 @@ from simulador import (
     criar_graficos,
     comparar_projecoes,
     encontrar_aporte_minimo_quitacao,
+    encontrar_aporte_minimo_prestacao,
     exportar_projecao_csv,
     exportar_graficos,
     gerar_resumo_financeiro,
@@ -31,6 +32,7 @@ from modelos import (
     CenarioProjecao,
     EstrategiaAmortizacao,
     FrequenciaAmortizacao,
+    MetaPrestacao,
     MetaQuitacao,
     ModoAmortizacao,
 )
@@ -190,7 +192,7 @@ def _estrategia_por_texto(
         raise typer.BadParameter(str(erro)) from erro
 
 
-def _estrategia_para_meta_quitacao(
+def _estrategia_para_planejamento(
     data: str | None,
     modo: str,
     frequencia: str,
@@ -516,8 +518,11 @@ def comparar(
 
 @app.command()
 def planejar(
-    meta_quitacao: str = typer.Option(
-        ..., "--meta-quitacao", help="Data máxima de quitação AAAA-MM-DD."
+    meta_quitacao: str | None = typer.Option(
+        None, "--meta-quitacao", help="Data máxima de quitação AAAA-MM-DD."
+    ),
+    meta_prestacao: str | None = typer.Option(
+        None, "--meta-prestacao", help="Valor máximo da prestação."
     ),
     data: str | None = typer.Option(None, "--data", help="Início dos aportes."),
     modo: str = typer.Option("prazo", "--modo"),
@@ -525,32 +530,66 @@ def planejar(
     ate: str | None = typer.Option(None, "--ate", help="Fim da recorrência."),
     csv: Path = typer.Option(Path("extrato.csv"), "--csv"),
 ) -> None:
-    """Encontra o menor aporte para atingir uma data de quitação-alvo."""
+    """Encontra o menor aporte para atingir uma meta de quitação ou prestação."""
+    if (meta_quitacao is None) == (meta_prestacao is None):
+        raise typer.BadParameter(
+            "Informe exatamente uma meta: --meta-quitacao ou --meta-prestacao."
+        )
     historico = _historico(csv)
     cenario = criar_cenario_padrao(historico)
-    data_meta = _data(meta_quitacao)
     frequencia_validada = _frequencia(frequencia)
-    data_final_aportes = (
-        ate if ate is not None or frequencia_validada == "unica" else meta_quitacao
-    )
+    data_final_aportes = ate
+    if meta_quitacao is not None and ate is None and frequencia_validada != "unica":
+        data_final_aportes = meta_quitacao
     try:
-        resultado = encontrar_aporte_minimo_quitacao(
-            cenario,
-            MetaQuitacao(data_meta),
-            _estrategia_para_meta_quitacao(
-                data, modo, frequencia, data_final_aportes, cenario
-            ),
+        estrategia = _estrategia_para_planejamento(
+            data, modo, frequencia, data_final_aportes, cenario
         )
+        if meta_quitacao is not None:
+            data_meta = _data(meta_quitacao)
+            resultado_quitacao = encontrar_aporte_minimo_quitacao(
+                cenario, MetaQuitacao(data_meta), estrategia
+            )
+        else:
+            valor_meta = _tr_decimal(meta_prestacao)
+            if valor_meta is None:
+                raise typer.BadParameter("O valor da meta de prestação é obrigatório.")
+            resultado_prestacao = encontrar_aporte_minimo_prestacao(
+                cenario, MetaPrestacao(valor_meta), estrategia
+            )
     except ValueError as erro:
         raise typer.BadParameter(str(erro)) from erro
-    typer.echo("PLANEJAMENTO — META DE QUITAÇÃO")
-    typer.echo(f"Meta de quitação: {data_meta:%d/%m/%Y}.")
-    if resultado.meta_ja_cumprida:
+    if meta_quitacao is not None:
+        typer.echo("PLANEJAMENTO — META DE QUITAÇÃO")
+        typer.echo(f"Meta de quitação: {data_meta:%d/%m/%Y}.")
+        if resultado_quitacao.meta_ja_cumprida:
+            typer.echo("O cenário-base já atende à meta; aporte necessário: R$ 0.00.")
+        else:
+            typer.echo(
+                f"Aporte mínimo por ocorrência: R$ {resultado_quitacao.valor_minimo:.2f}."
+            )
+            typer.echo(f"Frequência: {resultado_quitacao.estrategia.frequencia}.")
+        typer.echo(f"Quitação obtida: {resultado_quitacao.data_quitacao:%d/%m/%Y}.")
+        return
+
+    typer.echo("PLANEJAMENTO — META DE PRESTAÇÃO")
+    typer.echo(f"Meta de prestação: R$ {valor_meta:.2f}.")
+    if resultado_prestacao.meta_ja_cumprida:
         typer.echo("O cenário-base já atende à meta; aporte necessário: R$ 0.00.")
     else:
-        typer.echo(f"Aporte mínimo por ocorrência: R$ {resultado.valor_minimo:.2f}.")
-        typer.echo(f"Frequência: {resultado.estrategia.frequencia}.")
-    typer.echo(f"Quitação obtida: {resultado.data_quitacao:%d/%m/%Y}.")
+        typer.echo(
+            f"Aporte mínimo por ocorrência: R$ {resultado_prestacao.valor_minimo:.2f}."
+        )
+        typer.echo(f"Frequência: {resultado_prestacao.estrategia.frequencia}.")
+    base = resultado_prestacao.prestacao_base
+    obtida = resultado_prestacao.prestacao_obtida
+    data_avaliada = obtida.data or base.data
+    if data_avaliada is None:
+        typer.echo("Não haverá prestação posterior: o contrato estará quitado.")
+    else:
+        typer.echo(f"Prestação avaliada: {data_avaliada:%d/%m/%Y}.")
+    typer.echo(f"Prestação sem amortização: R$ {base.valor:.2f}.")
+    typer.echo(f"Prestação obtida: R$ {obtida.valor:.2f}.")
 
 
 if __name__ == "__main__":
