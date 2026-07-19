@@ -31,3 +31,15 @@ class ValorInvalidoError(ExtratoCSVError):
 
 class RegistroDuplicadoError(ExtratoCSVError):
     """O CSV possui registros completamente duplicados."""
+
+
+class ExtratoPDFError(ValueError):
+    """Erro base para extração de um extrato PDF."""
+
+
+class ArquivoPDFNaoEncontradoError(ExtratoPDFError):
+    """O arquivo PDF informado não existe."""
+
+
+class ExtracaoPDFError(ExtratoPDFError):
+    """O PDF não contém linhas de extrato reconhecíveis."""

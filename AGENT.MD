@@ -33,8 +33,8 @@ O CSV possui as colunas:
 - Valor Pago
 - Capital
 
-No futuro também existirá um módulo responsável por converter
-automaticamente o PDF do BB para CSV.
+O comando `extrair-pdf` converte o PDF textual do BB em um CSV separado e
+validado, sem alterar os arquivos de referência.
 
 ---
 

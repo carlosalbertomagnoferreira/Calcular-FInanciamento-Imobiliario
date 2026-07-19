@@ -33,6 +33,24 @@ def test_planejar_meta_de_prestacao_exibe_resultado() -> None:
     assert "Prestação obtida:" in resultado.output
 
 
+def test_extrair_pdf_gera_csv_validado(tmp_path: Path) -> None:
+    destino = tmp_path / "extrato_extraido.csv"
+    resultado = runner.invoke(
+        app,
+        [
+            "extrair-pdf",
+            "--pdf",
+            str(RAIZ_PROJETO / "extrato319405086.pdf"),
+            "--saida",
+            str(destino),
+        ],
+    )
+
+    assert resultado.exit_code == 0
+    assert "PDF extraído e validado: 164 eventos." in resultado.output
+    assert destino.exists()
+
+
 def test_planejar_exige_apenas_uma_meta() -> None:
     resultado = runner.invoke(
         app,

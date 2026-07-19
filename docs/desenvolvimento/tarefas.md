@@ -213,12 +213,12 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ---
 
-# Fase 9 — PDF
+# Fase 9 — PDF — concluída
 
-- [ ] Ler PDF
-- [ ] Extrair tabela
-- [ ] Validar dados
-- [ ] Exportar CSV
+- [x] Ler PDF textual
+- [x] Extrair tabela financeira
+- [x] Validar dados pelo leitor canônico
+- [x] Exportar CSV separado
 
 ---
 

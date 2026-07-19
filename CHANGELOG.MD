@@ -12,6 +12,8 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 ## Added
 
+- Conversão de extrato PDF textual para CSV validado pelo comando `extrair-pdf`
+
 - Estrutura inicial do projeto
 - Documentação arquitetural
 - Especificação funcional

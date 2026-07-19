@@ -437,7 +437,10 @@ Download dos resultados
 
 # Conversor PDF
 
-Versão futura.
+O comando `extrair-pdf --pdf ARQUIVO --saida CSV` deverá extrair as linhas
+financeiras de um PDF textual do Banco do Brasil, gerar um CSV separado no
+layout canônico e validá-lo pelo mesmo leitor usado pela aplicação. Os arquivos
+de referência não poderão ser sobrescritos automaticamente.
 
 Fluxo:
 

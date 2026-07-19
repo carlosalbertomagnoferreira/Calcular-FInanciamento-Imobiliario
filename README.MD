@@ -18,7 +18,8 @@ A reconstrução histórica preserva os valores reportados pelo banco e expõe d
 
 `extrato319405086.pdf` é o extrato-base original. `extrato.csv` é o CSV de referência do projeto.
 
-Esses arquivos não devem ser alterados pela aplicação. A extração definitiva do PDF será implementada posteriormente como um componente próprio, sem sobrescrever os dados de referência.
+Esses arquivos não devem ser alterados pela aplicação. O comando `extrair-pdf`
+gera um CSV novo e validado, sem sobrescrever os dados de referência.
 
 ---
 
@@ -65,6 +66,14 @@ Validar o extrato e a sequência de parcelas:
 
 ```bash
 uv run python main.py validar
+```
+
+Extrair e validar um CSV a partir do PDF do Banco do Brasil:
+
+```bash
+uv run python main.py extrair-pdf \
+  --pdf extrato319405086.pdf \
+  --saida extrato_extraido.csv
 ```
 
 Projetar as parcelas restantes:

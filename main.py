@@ -10,6 +10,7 @@ import typer
 
 from simulador import (
     comparar_estrategias,
+    converter_pdf_para_csv,
     criar_agenda_estrategia,
     criar_cenario_padrao,
     criar_graficos,
@@ -272,6 +273,25 @@ def validar(csv: Path = typer.Option(Path("extrato.csv"), "--csv")) -> None:
         f"{validas.iloc[0]['Número da Parcela']} a "
         f"{validas.iloc[-1]['Número da Parcela']})."
     )
+
+
+@app.command("extrair-pdf")
+def extrair_pdf(
+    pdf: Path = typer.Option(
+        Path("extrato319405086.pdf"), "--pdf", help="Extrato PDF do Banco do Brasil."
+    ),
+    saida: Path = typer.Option(
+        Path("extrato_extraido.csv"), "--saida", help="CSV extraído e validado."
+    ),
+) -> None:
+    """Converte um extrato PDF para CSV validado sem alterar a fonte original."""
+    try:
+        caminho = converter_pdf_para_csv(pdf, saida)
+        quantidade = len(ler_extrato_csv(caminho))
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+    typer.echo(f"PDF extraído e validado: {quantidade} eventos.")
+    typer.echo(f"CSV gerado em: {caminho}.")
 
 
 @app.command()

@@ -381,16 +381,21 @@ em confiabilidade operacional, regressão e critérios formais de release.
 
 - Calibração avançada permanece adiada até que os componentes históricos
   pendentes sejam explicados.
-- Conversão automática de PDF permanece planejada para a versão 1.1.
+- Conversão de PDF textual é entregue na versão 1.1; PDFs escaneados ou com
+  layouts distintos permanecem fora do escopo atual.
 
 ---
 
-# Versão 1.1
+# Versão 1.1 — concluída
 ## Conversor PDF → CSV
 
 ### Objetivos
 
 Eliminar necessidade de gerar CSV manualmente.
+
+O comando `extrair-pdf` extrai as linhas financeiras do PDF textual, converte a
+ordem visual dos componentes para o layout canônico e valida o CSV gerado antes
+de disponibilizá-lo para simulação.
 
 ### Fluxo
 

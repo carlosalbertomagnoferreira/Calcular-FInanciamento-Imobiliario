@@ -9,6 +9,7 @@ from simulador.amortizacao import (
     projetar_com_amortizacoes,
 )
 from simulador.exportacao import exportar_projecao_csv
+from simulador.extrator_pdf import converter_pdf_para_csv, extrair_extrato_pdf
 from simulador.graficos import criar_graficos, exportar_graficos
 from simulador.leitor import ler_extrato_csv
 from simulador.logging import configurar_logging
@@ -37,6 +38,8 @@ __all__ = [
     "criar_agenda_estrategia",
     "normalizar_data_amortizacao",
     "exportar_projecao_csv",
+    "extrair_extrato_pdf",
+    "converter_pdf_para_csv",
     "criar_graficos",
     "exportar_graficos",
     "identificar_parcelas_validas",
