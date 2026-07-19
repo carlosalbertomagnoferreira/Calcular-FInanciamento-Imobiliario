@@ -41,6 +41,8 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 ### Changed
 
 - Modos de prestação e parcelas passam a informar o saldo antes e após o aporte
+- Datas de amortização normalizadas para o vencimento mensal e validadas contra o prazo
+- Saldo de amortizações recorrentes reportado na data final de `--ate`
 
 ## [0.7.0] - Gráficos
 

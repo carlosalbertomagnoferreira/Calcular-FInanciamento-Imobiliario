@@ -273,7 +273,9 @@ Programado.
 O comando `amortizar` compara o cenário original e o amortizado, informando
 juros economizados e saldo antes/depois do aporte. No modo de prazo, também
 informa o prazo abatido; nos modos de prestação e parcelas, compara as cinco
-próximas prestações.
+próximas prestações. Datas são normalizadas para o vencimento mensal e validadas
+contra o prazo do contrato; em recorrências, o saldo após amortizar refere-se à
+data final de `--ate`.
 
 ---
 

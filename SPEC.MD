@@ -296,6 +296,11 @@ original. Em ambos os modos, deverá informar o saldo antes e após o aporte. Em
 redução de prazo, deverá informar também o prazo abatido; em redução de
 prestação, deverá comparar as cinco próximas prestações com e sem amortização.
 
+Datas de amortização que não coincidam com o vencimento serão normalizadas para
+o dia 10 do mesmo mês. Datas anteriores à primeira parcela projetada ou
+posteriores à quitação prevista serão rejeitadas. Em uma recorrência, o saldo
+após amortizar será reportado na data final indicada em `--ate`.
+
 ---
 
 # Relatórios

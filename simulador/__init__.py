@@ -3,6 +3,7 @@
 from simulador.calibracao import calibrar_historico
 from simulador.amortizacao import (
     gerar_amortizacoes_recorrentes,
+    normalizar_data_amortizacao,
     projetar_com_amortizacoes,
 )
 from simulador.exportacao import exportar_projecao_csv
@@ -20,6 +21,7 @@ from simulador.reconstrucao import reconstruir_historico
 __all__ = [
     "calibrar_historico",
     "gerar_amortizacoes_recorrentes",
+    "normalizar_data_amortizacao",
     "exportar_projecao_csv",
     "criar_graficos",
     "exportar_graficos",

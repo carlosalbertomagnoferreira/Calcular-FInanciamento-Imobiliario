@@ -16,6 +16,7 @@ from simulador import (
     gerar_resumo_financeiro,
     identificar_parcelas_validas,
     ler_extrato_csv,
+    normalizar_data_amortizacao,
     projetar_contrato,
     projetar_com_amortizacoes,
     reconstruir_historico,
@@ -61,7 +62,7 @@ def _modo(valor: str) -> ModoAmortizacao:
 
 
 def _amortizacao_programada(
-    valor: str, modo: ModoAmortizacao
+    valor: str, modo: ModoAmortizacao, cenario: object
 ) -> AmortizacaoExtraordinaria:
     try:
         data_texto, valor_texto = valor.split(":", maxsplit=1)
@@ -70,7 +71,11 @@ def _amortizacao_programada(
     valor_decimal = _tr_decimal(valor_texto)
     if valor_decimal is None:
         raise typer.BadParameter("O valor da amortização é obrigatório.")
-    return AmortizacaoExtraordinaria(_data(data_texto), valor_decimal, modo)
+    try:
+        data = normalizar_data_amortizacao(_data(data_texto), cenario)  # type: ignore[arg-type]
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+    return AmortizacaoExtraordinaria(data, valor_decimal, modo)
 
 
 @app.command()
@@ -178,12 +183,22 @@ def amortizar(
             or frequencia != "unica"
         ):
             raise typer.BadParameter("Use apenas --amortizacao para agenda programada.")
-        agenda = [_amortizacao_programada(item, modo_validado) for item in amortizacao]
+        agenda = [
+            _amortizacao_programada(item, modo_validado, cenario)
+            for item in amortizacao
+        ]
     else:
         if valor is None:
             raise typer.BadParameter("Informe --valor ou ao menos um --amortizacao.")
-        inicio = _data(data) if data else cenario.data_inicio
-        fim = _data(ate) if ate else inicio
+        try:
+            inicio = normalizar_data_amortizacao(
+                _data(data) if data else cenario.data_inicio, cenario
+            )
+            fim = normalizar_data_amortizacao(_data(ate), cenario) if ate else inicio
+        except ValueError as erro:
+            raise typer.BadParameter(str(erro)) from erro
+        if fim < inicio:
+            raise typer.BadParameter("--ate não pode ser anterior à data inicial.")
         meses = {"unica": 1, "mensal": 1, "anual": 12}.get(frequencia)
         if meses is None:
             raise typer.BadParameter("Use 'unica', 'mensal' ou 'anual'.")
@@ -204,32 +219,28 @@ def amortizar(
     )
     juros_economizados = sum(projecao_original["Juros"]) - sum(projecao["Juros"])
     typer.echo(f"Juros economizados: R$ {juros_economizados:.2f}.")
+    data_referencia = agenda[-1].data if frequencia != "unica" else agenda[0].data
+    linha_saldo = projecao.loc[projecao["Data"] == data_referencia]
+    saldo_apos = linha_saldo.iloc[0]["Saldo Final"] if not linha_saldo.empty else None
+    texto_saldo_apos = (
+        f"R$ {saldo_apos:.2f}"
+        if saldo_apos is not None
+        else f"quitado antes de {data_referencia:%d/%m/%Y}"
+    )
     if modo_validado == "prazo":
-        primeira_com_amortizacao = projecao.loc[
-            projecao["Amortização Extraordinária"] > 0
-        ].iloc[0]
         typer.echo(f"Saldo devedor atual: R$ {cenario.saldo_inicial:.2f}.")
-        typer.echo(
-            "Saldo devedor após amortizar: "
-            f"R$ {primeira_com_amortizacao['Saldo Final']:.2f}."
-        )
+        typer.echo(f"Saldo devedor após amortizar: {texto_saldo_apos}.")
         meses_abatidos = len(projecao_original) - len(projecao)
         anos, meses = divmod(meses_abatidos, 12)
         typer.echo(
             f"Prazo abatido: {meses_abatidos} meses ({anos} anos e {meses} meses)."
         )
     else:
-        primeira_com_amortizacao = projecao.loc[
-            projecao["Amortização Extraordinária"] > 0
-        ].iloc[0]
         ultima_paga = (
             historico.loc[historico["Parcela Válida"]].sort_values("Data").iloc[-1]
         )
         typer.echo(f"Saldo devedor atual: R$ {cenario.saldo_inicial:.2f}.")
-        typer.echo(
-            "Saldo devedor após amortizar: "
-            f"R$ {primeira_com_amortizacao['Saldo Final']:.2f}."
-        )
+        typer.echo(f"Saldo devedor após amortizar: {texto_saldo_apos}.")
         typer.echo(
             f"Última parcela paga: {ultima_paga['Data']:%d/%m/%Y} — "
             f"R$ {ultima_paga['Valor Pago']:.2f}."

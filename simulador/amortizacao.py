@@ -33,6 +33,17 @@ def gerar_amortizacoes_recorrentes(
     return agenda
 
 
+def normalizar_data_amortizacao(data: date, cenario: CenarioProjecao) -> date:
+    """Converte a data para o vencimento mensal e valida o prazo projetado."""
+    data_vencimento = data.replace(day=cenario.data_inicio.day)
+    data_final = _adicionar_meses(cenario.data_inicio, cenario.parcelas_restantes - 1)
+    if data_vencimento < cenario.data_inicio:
+        raise ValueError("A data da amortização é anterior ao início da projeção.")
+    if data_vencimento > data_final:
+        raise ValueError("A data da amortização é posterior à quitação prevista.")
+    return data_vencimento
+
+
 def projetar_com_amortizacoes(
     cenario: CenarioProjecao, amortizacoes: Iterable[AmortizacaoExtraordinaria]
 ) -> pd.DataFrame:

@@ -94,9 +94,12 @@ uv run python main.py amortizar --valor 10000 --data 2026-08-10 --modo parcelas
 
 Para aportes recorrentes, use `--frequencia mensal` ou `--frequencia anual` com
 `--ate`. Para uma agenda programada, repita `--amortizacao AAAA-MM-DD:VALOR`.
+Datas informadas fora do dia 10 são aplicadas no vencimento daquele mês; datas
+anteriores à primeira parcela projetada ou posteriores à quitação são rejeitadas.
 O comando informa juros economizados e saldos antes/depois do aporte; no modo
 `prazo`, também mostra o prazo abatido, e no modo `parcelas`, compara as cinco
-próximas prestações.
+próximas prestações. Em aportes recorrentes, o saldo após amortizar é o saldo na
+data final informada em `--ate`.
 
 ---
 

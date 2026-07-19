@@ -169,7 +169,8 @@ uv run python main.py projetar
 uv run python main.py relatorio
 
 O comando `projetar` aceita `--saida` para exportar o CSV da projeção.
-Os comandos de amortização serão disponibilizados na versão 0.8.
+O comando `amortizar` está disponível na versão 0.8; os comandos de comparação
+de cenários serão disponibilizados em etapa posterior.
 
 ---
 
