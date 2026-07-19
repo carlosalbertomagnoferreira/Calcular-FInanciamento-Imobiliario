@@ -10,7 +10,7 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 O projeto está na versão 0.8. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos e simulações de amortização estão disponíveis pela linha de comando.
 
-A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e cenários de amortização extraordinária estão disponíveis; a comparação avançada de cenários é a próxima evolução prevista.
+A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. Gráficos e cenários de amortização extraordinária estão disponíveis; planejamento de metas e comparação de estratégias são as próximas evoluções previstas.
 
 ---
 

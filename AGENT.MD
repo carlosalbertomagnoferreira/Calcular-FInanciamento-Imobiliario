@@ -71,7 +71,7 @@ O software deverá ser capaz de:
 - exportar CSV
 - gerar relatórios
 - simular amortizações extraordinárias
-- comparar cenários
+- comparar estratégias e planejar metas de amortização
 
 ---
 
@@ -169,8 +169,8 @@ uv run python main.py projetar
 uv run python main.py relatorio
 
 O comando `projetar` aceita `--saida` para exportar o CSV da projeção.
-O comando `amortizar` está disponível na versão 0.8; os comandos de comparação
-de cenários serão disponibilizados em etapa posterior.
+O comando `amortizar` está disponível na versão 0.8. A versão 0.9 evoluirá a
+comparação para múltiplas estratégias e incluirá planejamento por meta.
 
 ---
 

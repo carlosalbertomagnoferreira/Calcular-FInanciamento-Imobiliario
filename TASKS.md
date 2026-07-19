@@ -166,6 +166,18 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ---
 
+# Fase 8.1 — Planejamento de metas (versão 0.9)
+
+- [ ] Comparar múltiplas estratégias de amortização
+- [ ] Calcular aporte mínimo para uma data de quitação-alvo
+- [ ] Calcular aporte mínimo para uma prestação-alvo
+- [ ] Avaliar prestação-alvo na primeira parcela posterior ao aporte, com acessórios
+- [ ] Explicar metas inviáveis
+- [ ] Criar comando `planejar`
+- [ ] Cobrir planejador e cenários múltiplos com testes
+
+---
+
 # Fase 9 — PDF
 
 - [ ] Ler PDF

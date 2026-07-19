@@ -280,29 +280,33 @@ data final de `--ate`.
 ---
 
 # Versão 0.9
-## Comparação de Cenários
+## Planejamento de Metas e Estratégias
 
 ### Objetivos
 
-Comparar:
+Transformar projeções em informações acionáveis para decisão financeira.
 
-Cenário original
+### Entregas
 
-×
+- Comparar o cenário-base e múltiplas estratégias de amortização em uma tabela.
+- Informar aporte total, juros economizados, desembolso futuro, quitação, prazo,
+  prestação e saldo para cada estratégia.
+- Encontrar, por busca numérica, o menor aporte que atenda a uma meta.
 
-Novo cenário
+### Metas suportadas
 
-### Métricas
+- Quitar até uma data desejada.
+- Reduzir a prestação a um valor máximo.
+- Avaliar aportes únicos, mensais ou anuais.
 
-Economia.
+A meta de prestação considera a primeira parcela posterior ao aporte, incluindo
+os acessórios contratuais.
 
-Juros.
+### Critério de aceite
 
-Prazo.
+Para uma meta válida, apresentar o aporte mínimo e a projeção resultante. Para
+uma meta inviável, retornar uma explicação clara.
 
-Prestação.
-
-Saldo.
 
 ---
 

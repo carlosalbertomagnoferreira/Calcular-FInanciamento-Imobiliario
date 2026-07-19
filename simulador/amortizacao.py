@@ -6,7 +6,7 @@ from decimal import Decimal
 
 import pandas as pd
 
-from modelos import AmortizacaoExtraordinaria, CenarioProjecao
+from modelos import AmortizacaoExtraordinaria, CenarioProjecao, EstrategiaAmortizacao
 from simulador.projecao import (
     _adicionar_meses,
     _arredondar,
@@ -42,6 +42,26 @@ def normalizar_data_amortizacao(data: date, cenario: CenarioProjecao) -> date:
     if data_vencimento > data_final:
         raise ValueError("A data da amortização é posterior à quitação prevista.")
     return data_vencimento
+
+
+def criar_agenda_estrategia(
+    cenario: CenarioProjecao, estrategia: EstrategiaAmortizacao
+) -> list[AmortizacaoExtraordinaria]:
+    """Cria a agenda validada de uma estratégia de amortização."""
+    if estrategia.valor == 0:
+        return []
+    inicio = normalizar_data_amortizacao(estrategia.data_inicio, cenario)
+    fim = (
+        normalizar_data_amortizacao(estrategia.data_fim, cenario)
+        if estrategia.data_fim
+        else inicio
+    )
+    if fim < inicio:
+        raise ValueError("A data final não pode ser anterior à data inicial.")
+    frequencia_meses = {"unica": 1, "mensal": 1, "anual": 12}[estrategia.frequencia]
+    return gerar_amortizacoes_recorrentes(
+        estrategia.valor, inicio, fim, estrategia.modo, frequencia_meses
+    )
 
 
 def projetar_com_amortizacoes(

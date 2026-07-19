@@ -10,6 +10,7 @@ import typer
 from simulador import (
     criar_cenario_padrao,
     criar_graficos,
+    comparar_projecoes,
     exportar_projecao_csv,
     exportar_graficos,
     gerar_amortizacoes_recorrentes,
@@ -261,6 +262,105 @@ def amortizar(
     if saida is not None:
         caminho = exportar_projecao_csv(projecao, saida)
         typer.echo(f"Projeção exportada para: {caminho}.")
+
+
+@app.command()
+def comparar(
+    valor: str | None = typer.Option(None, "--valor"),
+    data: str | None = typer.Option(None, "--data"),
+    modo: str = typer.Option("prazo", "--modo"),
+    frequencia: str = typer.Option("unica", "--frequencia"),
+    ate: str | None = typer.Option(None, "--ate"),
+    amortizacao: list[str] = typer.Option([], "--amortizacao"),
+    csv: Path = typer.Option(Path("extrato.csv"), "--csv"),
+) -> None:
+    """Compara a projeção original com um cenário de amortização."""
+    modo_validado = _modo(modo)
+    historico = _historico(csv)
+    cenario = criar_cenario_padrao(historico)
+    if amortizacao:
+        if (
+            valor is not None
+            or data is not None
+            or ate is not None
+            or frequencia != "unica"
+        ):
+            raise typer.BadParameter("Use apenas --amortizacao para agenda programada.")
+        agenda = [
+            _amortizacao_programada(item, modo_validado, cenario)
+            for item in amortizacao
+        ]
+    else:
+        if valor is None:
+            raise typer.BadParameter("Informe --valor ou ao menos um --amortizacao.")
+        try:
+            inicio = normalizar_data_amortizacao(
+                _data(data) if data else cenario.data_inicio, cenario
+            )
+            fim = normalizar_data_amortizacao(_data(ate), cenario) if ate else inicio
+        except ValueError as erro:
+            raise typer.BadParameter(str(erro)) from erro
+        if fim < inicio:
+            raise typer.BadParameter("--ate não pode ser anterior à data inicial.")
+        meses = {"unica": 1, "mensal": 1, "anual": 12}.get(frequencia)
+        if meses is None:
+            raise typer.BadParameter("Use 'unica', 'mensal' ou 'anual'.")
+        if frequencia != "unica" and ate is None:
+            raise typer.BadParameter("Informe --ate para amortizações recorrentes.")
+        valor_decimal = _tr_decimal(valor)
+        if valor_decimal is None:
+            raise typer.BadParameter("O valor da amortização é obrigatório.")
+        agenda = gerar_amortizacoes_recorrentes(
+            valor_decimal, inicio, fim, modo_validado, meses
+        )
+    projecao_original = projetar_contrato(cenario)
+    projecao_cenario = projetar_com_amortizacoes(cenario, agenda)
+    resumo = comparar_projecoes(projecao_original, projecao_cenario)
+    typer.echo("COMPARAÇÃO DE CENÁRIOS")
+    typer.echo(f"Juros economizados: R$ {resumo.juros_economizados:.2f}.")
+    typer.echo(f"Economia total: R$ {resumo.economia_total:.2f}.")
+    typer.echo(
+        f"Quitação: {resumo.data_quitacao_original:%d/%m/%Y} → "
+        f"{resumo.data_quitacao_cenario:%d/%m/%Y}."
+    )
+    typer.echo(f"Prazo abatido: {resumo.meses_abatidos} meses.")
+    typer.echo(
+        f"Próxima prestação: R$ {resumo.prestacao_original:.2f} → "
+        f"R$ {resumo.prestacao_cenario:.2f} "
+        f"(diferença R$ {resumo.diferenca_prestacao:.2f})."
+    )
+    if frequencia == "unica":
+        typer.echo(
+            f"Saldo após a próxima parcela: R$ {resumo.saldo_original:.2f} → "
+            f"R$ {resumo.saldo_cenario:.2f}."
+        )
+    else:
+        referencia = agenda[-1].data
+        saldo_original = projecao_original.loc[
+            projecao_original["Data"] == referencia, "Saldo Final"
+        ].iloc[0]
+        saldo_cenario = projecao_cenario.loc[
+            projecao_cenario["Data"] == referencia, "Saldo Final"
+        ].iloc[0]
+        typer.echo(
+            f"Saldo em {referencia:%d/%m/%Y}: R$ {saldo_original:.2f} → "
+            f"R$ {saldo_cenario:.2f}."
+        )
+    if modo_validado == "prestacao":
+        typer.echo("Próximas cinco prestações:")
+        for sem_amortizacao, com_amortizacao in zip(
+            projecao_original.head(5).itertuples(),
+            projecao_cenario.head(5).itertuples(),
+        ):
+            diferenca = cast(Decimal, sem_amortizacao.Prestação) - cast(
+                Decimal, com_amortizacao.Prestação
+            )
+            typer.echo(
+                f"- {sem_amortizacao.Data:%d/%m/%Y}: "
+                f"sem amortização R$ {sem_amortizacao.Prestação:.2f}; "
+                f"com amortização R$ {com_amortizacao.Prestação:.2f}; "
+                f"diferença R$ {diferenca:.2f}."
+            )
 
 
 if __name__ == "__main__":

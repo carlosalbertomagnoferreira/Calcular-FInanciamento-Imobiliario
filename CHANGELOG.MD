@@ -29,6 +29,7 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 ## Changed
 
 - Cenário padrão de projeção passou a usar a média das últimas 12 TRs válidas
+- Roadmap da versão 0.9 redefinido para planejamento de metas e estratégias
 
 ## [0.8.0] - Simulação de Amortizações
 

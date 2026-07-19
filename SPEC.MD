@@ -303,6 +303,19 @@ após amortizar será reportado na data final indicada em `--ate`.
 
 ---
 
+# Planejamento de metas
+
+O sistema deverá comparar múltiplas estratégias de amortização e apresentar,
+para cada uma, aporte total, desembolso futuro, economia de juros, quitação,
+prazo, próxima prestação e saldo. Também deverá encontrar o menor aporte para
+atingir uma data máxima de quitação ou uma prestação máxima, respeitando a
+frequência e o modo escolhidos. Metas inviáveis deverão produzir erro explícito.
+Para a meta de prestação, o valor avaliado será a primeira prestação posterior
+ao aporte, já incluindo acessórios; a prestação da própria data do aporte não é
+alterada, pois a amortização ocorre após seu pagamento regular.
+
+---
+
 # Relatórios
 
 O sistema deverá produzir:

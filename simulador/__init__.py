@@ -1,8 +1,10 @@
 """Componentes do simulador de financiamento imobiliário."""
 
 from simulador.calibracao import calibrar_historico
+from simulador.comparacao import comparar_projecoes
 from simulador.amortizacao import (
     gerar_amortizacoes_recorrentes,
+    criar_agenda_estrategia,
     normalizar_data_amortizacao,
     projetar_com_amortizacoes,
 )
@@ -20,7 +22,9 @@ from simulador.reconstrucao import reconstruir_historico
 
 __all__ = [
     "calibrar_historico",
+    "comparar_projecoes",
     "gerar_amortizacoes_recorrentes",
+    "criar_agenda_estrategia",
     "normalizar_data_amortizacao",
     "exportar_projecao_csv",
     "criar_graficos",
