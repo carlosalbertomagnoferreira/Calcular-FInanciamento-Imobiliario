@@ -219,8 +219,16 @@ def amortizar(
             f"Prazo abatido: {meses_abatidos} meses ({anos} anos e {meses} meses)."
         )
     else:
+        primeira_com_amortizacao = projecao.loc[
+            projecao["Amortização Extraordinária"] > 0
+        ].iloc[0]
         ultima_paga = (
             historico.loc[historico["Parcela Válida"]].sort_values("Data").iloc[-1]
+        )
+        typer.echo(f"Saldo devedor atual: R$ {cenario.saldo_inicial:.2f}.")
+        typer.echo(
+            "Saldo devedor após amortizar: "
+            f"R$ {primeira_com_amortizacao['Saldo Final']:.2f}."
         )
         typer.echo(
             f"Última parcela paga: {ultima_paga['Data']:%d/%m/%Y} — "

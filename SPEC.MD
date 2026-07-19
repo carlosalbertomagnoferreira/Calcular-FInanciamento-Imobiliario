@@ -292,9 +292,9 @@ O modo `parcelas` é um alias de `prestacao` na CLI.
 
 As amortizações são aplicadas após a prestação regular da data informada. O
 cenário com amortização deverá informar a economia de juros frente à projeção
-original. Em redução de prazo, deverá informar o saldo antes e após o aporte e
-o prazo abatido; em redução de prestação, deverá comparar as cinco próximas
-prestações com e sem amortização.
+original. Em ambos os modos, deverá informar o saldo antes e após o aporte. Em
+redução de prazo, deverá informar também o prazo abatido; em redução de
+prestação, deverá comparar as cinco próximas prestações com e sem amortização.
 
 ---
 

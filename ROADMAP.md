@@ -271,9 +271,9 @@ Anual.
 Programado.
 
 O comando `amortizar` compara o cenário original e o amortizado, informando
-juros economizados. No modo de prazo, também informa saldo antes e após o aporte
-e o prazo abatido; nos modos de prestação e parcelas, compara as cinco próximas
-prestações.
+juros economizados e saldo antes/depois do aporte. No modo de prazo, também
+informa o prazo abatido; nos modos de prestação e parcelas, compara as cinco
+próximas prestações.
 
 ---
 

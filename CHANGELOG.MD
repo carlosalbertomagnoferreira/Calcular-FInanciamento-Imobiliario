@@ -38,6 +38,10 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 - Modos de redução de prazo, prestação e alias `parcelas`
 - Comparação de juros, prazo, saldo e próximas prestações entre os cenários
 
+### Changed
+
+- Modos de prestação e parcelas passam a informar o saldo antes e após o aporte
+
 ## [0.7.0] - Gráficos
 
 ### Added
