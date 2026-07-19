@@ -116,13 +116,13 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 - README.MD
 - AGENT.md
-- SPEC.md
-- ARCHITECTURE.md
-- ROADMAP.md
-- TASKS.md
+- docs/produto/spec.md
+- docs/arquitetura/arquitetura.md
+- docs/produto/roadmap.md
+- docs/desenvolvimento/tarefas.md
 - CONTRIBUTING.md
 - CHANGELOG.md
-- DECISIONS.md
+- docs/arquitetura/decisoes.md
 
 ### Estrutura
 

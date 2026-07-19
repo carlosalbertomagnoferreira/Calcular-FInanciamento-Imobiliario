@@ -1,5 +1,3 @@
-# DECISIONS.md
-
 # Registro de Decisões Arquiteturais
 
 Este documento registra as principais decisões técnicas do projeto.

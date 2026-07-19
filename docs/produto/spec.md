@@ -1,5 +1,3 @@
-# SPEC.md
-
 # Especificação Funcional
 ## Simulador de Financiamento Imobiliário Banco do Brasil
 

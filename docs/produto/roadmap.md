@@ -1,5 +1,3 @@
-# ROADMAP.md
-
 # Roadmap
 ## Simulador de Financiamento Imobiliário Banco do Brasil
 

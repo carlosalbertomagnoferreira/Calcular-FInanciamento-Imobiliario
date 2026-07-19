@@ -6,10 +6,10 @@ Este documento contém as regras operacionais para qualquer agente de IA que tra
 
 Antes de modificar qualquer código, leia também:
 
-1. SPEC.md
-2. ARCHITECTURE.md
-3. DECISIONS.md
-4. ROADMAP.md
+1. docs/produto/spec.md
+2. docs/arquitetura/arquitetura.md
+3. docs/arquitetura/decisoes.md
+4. docs/produto/roadmap.md
 
 O README.MD é destinado aos usuários, não às regras de implementação.
 
@@ -29,7 +29,7 @@ A projeção futura somente poderá ser realizada após validar o modelo utiliza
 
 # Regras Obrigatórias
 
-## Nunca alterar a matemática do contrato sem atualizar o SPEC.md.
+## Nunca alterar a matemática do contrato sem atualizar o docs/produto/spec.md.
 
 Qualquer alteração em:
 
@@ -125,13 +125,13 @@ Nunca inverter essas etapas.
 
 Sempre verificar:
 
-- SPEC.md
-- DECISIONS.md
-- ARCHITECTURE.md
+- docs/produto/spec.md
+- docs/arquitetura/decisoes.md
+- docs/arquitetura/arquitetura.md
 
 Se existir conflito:
 
-DECISIONS.md possui prioridade.
+docs/arquitetura/decisoes.md possui prioridade.
 
 ---
 
@@ -255,9 +255,9 @@ Nunca implementar funcionalidades financeiras sem testes.
 Toda alteração relevante deve atualizar:
 
 - README.MD (se impactar o uso)
-- SPEC.md (se alterar regras)
-- ARCHITECTURE.md (se alterar estrutura)
-- DECISIONS.md (se alterar decisões arquiteturais)
+- docs/produto/spec.md (se alterar regras)
+- docs/arquitetura/arquitetura.md (se alterar estrutura)
+- docs/arquitetura/decisoes.md (se alterar decisões arquiteturais)
 - CHANGELOG.md (se houver nova versão)
 
 ---
@@ -290,8 +290,8 @@ Nunca assumir.
 
 Consultar:
 
-1. SPEC.md
-2. DECISIONS.md
+1. docs/produto/spec.md
+2. docs/arquitetura/decisoes.md
 
 Se ainda houver dúvida, preservar o comportamento existente e registrar a necessidade de esclarecimento.
 

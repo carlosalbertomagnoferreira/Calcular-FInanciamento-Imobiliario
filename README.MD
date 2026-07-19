@@ -105,7 +105,7 @@ data final informada em `--ate`.
 
 # Roadmap
 
-O roadmap detalhado está em [ROADMAP.md](ROADMAP.md). As próximas evoluções incluem calibração avançada e comparação de cenários.
+A documentação detalhada está em [docs/index.md](docs/index.md). As próximas evoluções incluem calibração avançada e planejamento de metas de amortização.
 
 ---
 

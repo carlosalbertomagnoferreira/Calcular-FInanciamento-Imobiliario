@@ -1,5 +1,3 @@
-# ARCHITECTURE.md
-
 # Arquitetura do Projeto
 
 Projeto:
@@ -37,9 +35,8 @@ financiamento_bb/
 ├── pyproject.toml
 ├── uv.lock
 ├── README.MD
-├── SPEC.md
-├── AGENT.md
-├── ARCHITECTURE.md
+├── AGENT.MD
+├── CLAUDE.md
 │
 ├── dados/
 │   ├── extrato.csv
@@ -71,6 +68,15 @@ financiamento_bb/
 ├── graficos/
 │
 └── docs/
+    ├── index.md
+    ├── produto/
+    │   ├── spec.md
+    │   └── roadmap.md
+    ├── arquitetura/
+    │   ├── arquitetura.md
+    │   └── decisoes.md
+    └── desenvolvimento/
+        └── tarefas.md
 ```
 
 ---

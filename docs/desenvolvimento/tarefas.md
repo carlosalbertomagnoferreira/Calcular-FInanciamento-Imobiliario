@@ -1,5 +1,3 @@
-# TASKS.md
-
 # Backlog do Projeto
 
 Projeto: Simulador de Financiamento Imobiliário BB
