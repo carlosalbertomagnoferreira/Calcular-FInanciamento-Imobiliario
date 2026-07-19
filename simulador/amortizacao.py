@@ -6,7 +6,12 @@ from decimal import Decimal
 
 import pandas as pd
 
-from modelos import AmortizacaoExtraordinaria, CenarioProjecao, EstrategiaAmortizacao
+from modelos import (
+    AmortizacaoExtraordinaria,
+    CenarioProjecao,
+    EstrategiaAmortizacao,
+    ModoAmortizacao,
+)
 from simulador.projecao import (
     _adicionar_meses,
     _arredondar,
@@ -19,7 +24,7 @@ def gerar_amortizacoes_recorrentes(
     valor: Decimal,
     data_inicio: date,
     data_fim: date,
-    modo: str,
+    modo: ModoAmortizacao,
     frequencia_meses: int,
 ) -> list[AmortizacaoExtraordinaria]:
     """Gera uma agenda mensal ou anual de amortizações extraordinárias."""
@@ -28,7 +33,7 @@ def gerar_amortizacoes_recorrentes(
     agenda: list[AmortizacaoExtraordinaria] = []
     data = data_inicio
     while data <= data_fim:
-        agenda.append(AmortizacaoExtraordinaria(data, valor, modo))  # type: ignore[arg-type]
+        agenda.append(AmortizacaoExtraordinaria(data, valor, modo))
         data = _adicionar_meses(data, frequencia_meses)
     return agenda
 
@@ -51,11 +56,9 @@ def criar_agenda_estrategia(
     if estrategia.valor == 0:
         return []
     inicio = normalizar_data_amortizacao(estrategia.data_inicio, cenario)
-    fim = (
-        normalizar_data_amortizacao(estrategia.data_fim, cenario)
-        if estrategia.data_fim
-        else inicio
-    )
+    fim = inicio
+    if estrategia.data_fim is not None:
+        fim = normalizar_data_amortizacao(estrategia.data_fim, cenario)
     if fim < inicio:
         raise ValueError("A data final não pode ser anterior à data inicial.")
     frequencia_meses = {"unica": 1, "mensal": 1, "anual": 12}[estrategia.frequencia]

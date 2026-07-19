@@ -4,7 +4,10 @@ from decimal import Decimal
 
 import pandas as pd
 
-from modelos.comparacao import ResumoComparacao
+from modelos import CenarioProjecao, EstrategiaAmortizacao
+from modelos.comparacao import ResultadoComparacaoEstrategia, ResumoComparacao
+from simulador.amortizacao import criar_agenda_estrategia, projetar_com_amortizacoes
+from simulador.projecao import projetar_contrato
 
 
 def comparar_projecoes(
@@ -42,6 +45,41 @@ def comparar_projecoes(
         saldo_original=original["Saldo Final"],
         saldo_cenario=cenario["Saldo Final"],
     )
+
+
+def comparar_estrategias(
+    cenario: CenarioProjecao,
+    estrategias: list[EstrategiaAmortizacao],
+) -> list[ResultadoComparacaoEstrategia]:
+    """Compara cada estratégia nomeada com a projeção-base do contrato.
+
+    O desembolso futuro inclui prestações, acessórios e os aportes efetivamente
+    aplicados. A lista preserva a ordem recebida para permitir sua apresentação
+    direta em tabela pela interface de linha de comando.
+    """
+    nomes = [estrategia.nome for estrategia in estrategias]
+    if len(nomes) != len(set(nomes)):
+        raise ValueError("Os nomes das estratégias devem ser únicos.")
+
+    projecao_base = projetar_contrato(cenario)
+    resultados: list[ResultadoComparacaoEstrategia] = []
+    for estrategia in estrategias:
+        agenda = criar_agenda_estrategia(cenario, estrategia)
+        projecao_estrategia = projetar_com_amortizacoes(cenario, agenda)
+        resumo = comparar_projecoes(projecao_base, projecao_estrategia)
+        resultados.append(
+            ResultadoComparacaoEstrategia(
+                estrategia=estrategia,
+                aporte_total=_somar(projecao_estrategia["Amortização Extraordinária"]),
+                juros_economizados=resumo.juros_economizados,
+                desembolso_futuro=resumo.total_restante_cenario,
+                data_quitacao=resumo.data_quitacao_cenario,
+                meses_abatidos=resumo.meses_abatidos,
+                proxima_prestacao=resumo.prestacao_cenario,
+                saldo_devedor=resumo.saldo_cenario,
+            )
+        )
+    return resultados
 
 
 def _somar(valores: pd.Series) -> Decimal:

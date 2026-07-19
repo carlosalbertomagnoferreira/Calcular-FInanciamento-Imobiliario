@@ -322,6 +322,18 @@ acessórios; a prestação da própria data do aporte não é alterada, pois a
 amortização ocorre após seu pagamento regular. A meta de prestação reutilizará
 o mecanismo de busca e as regras de estratégia criados nas subfases anteriores.
 
+Na comparação múltipla, cada estratégia será identificada por nome e exibirá
+aporte total efetivamente aplicado, juros economizados, desembolso futuro,
+quitação, prazo abatido, próxima prestação e saldo após a próxima parcela. A
+CLI aceitará estratégias repetidas no formato
+`NOME:VALOR:DATA:MODO[:FREQUENCIA:ATE]`.
+
+Na meta de quitação, o comando `planejar --meta-quitacao` deverá informar o
+menor valor de cada aporte, sua frequência e a data de quitação obtida. Se a
+projeção-base já cumprir a meta, deverá retornar aporte de R$ 0,00. Em uma
+estratégia recorrente sem `--ate`, a data-meta também será a data final dos
+aportes.
+
 ---
 
 # Relatórios

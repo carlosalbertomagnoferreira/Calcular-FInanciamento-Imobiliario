@@ -160,7 +160,7 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 - [x] Comando amortizar
 - [x] Comando relatorio
 - [x] Comando graficos
-- [ ] Comando comparar
+- [x] Comando comparar
 
 ---
 
@@ -168,26 +168,26 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 ## 0.9.1 — Base de estratégias
 
-- [ ] Consolidar estratégia, frequência e agenda de amortizações
-- [ ] Reutilizar a base em `amortizar` e `comparar`
-- [ ] Centralizar normalização e validações de datas e recorrências
-- [ ] Cobrir a base compartilhada com testes
+- [x] Consolidar estratégia, frequência e agenda de amortizações
+- [x] Reutilizar a base em `amortizar` e `comparar`
+- [x] Centralizar normalização e validações de datas e recorrências
+- [x] Cobrir a base compartilhada com testes
 
 ## 0.9.2 — Comparação de cenários
 
-- [ ] Comparar múltiplas estratégias de amortização
-- [ ] Exibir aporte, desembolso, juros, quitação, prazo, prestação e saldo
-- [ ] Evoluir o comando `comparar` para cenários múltiplos
-- [ ] Cobrir a comparação com testes
+- [x] Comparar múltiplas estratégias de amortização
+- [x] Exibir aporte, desembolso, juros, quitação, prazo, prestação e saldo
+- [x] Evoluir o comando `comparar` para cenários múltiplos
+- [x] Cobrir a comparação com testes
 
 ## 0.9.3 — Meta de quitação
 
-- [ ] Calcular aporte mínimo para uma data de quitação-alvo
-- [ ] Aceitar estratégias únicas, mensais e anuais
-- [ ] Retornar aporte nulo quando o cenário-base já cumprir a meta
-- [ ] Explicar metas inviáveis
-- [ ] Criar a interface inicial do comando `planejar`
-- [ ] Cobrir a busca do aporte mínimo com testes de limite em centavos
+- [x] Calcular aporte mínimo para uma data de quitação-alvo
+- [x] Aceitar estratégias únicas, mensais e anuais
+- [x] Retornar aporte nulo quando o cenário-base já cumprir a meta
+- [x] Explicar metas inviáveis
+- [x] Criar a interface inicial do comando `planejar`
+- [x] Cobrir a busca do aporte mínimo com testes de limite em centavos
 
 ## 0.9.4 — Meta de prestação
 

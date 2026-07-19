@@ -25,6 +25,10 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 - Relatório de erros percentuais de juros, prestação e saldo
 - Classificação explícita de componentes de prestação não identificados
 - Identificação ancorada das parcelas válidas 1 a 125
+- Base compartilhada de estratégias, frequências e agendas de amortização para
+  os comandos `amortizar` e `comparar`
+- Comparação de múltiplas estratégias nomeadas, com métricas financeiras
+- Planejamento do aporte mínimo para uma data de quitação-alvo
 
 ## Changed
 

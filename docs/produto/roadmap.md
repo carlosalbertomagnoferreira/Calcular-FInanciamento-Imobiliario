@@ -288,7 +288,7 @@ Para reduzir risco e permitir entregas incrementais, a versão será executada e
 quatro subfases. As fases 0.9.2 e 0.9.3 poderão ser desenvolvidas em paralelo
 após a consolidação da base compartilhada da 0.9.1.
 
-### 0.9.1 — Base de estratégias
+### 0.9.1 — Base de estratégias — concluída
 
 - Consolidar o modelo de estratégia de amortização, frequência e agenda de
   aportes.
@@ -296,13 +296,13 @@ após a consolidação da base compartilhada da 0.9.1.
   normalização e validação da agenda.
 - Remover duplicações de regras de negócio e ampliar os testes dessa base.
 
-### 0.9.2 — Comparação de cenários
+### 0.9.2 — Comparação de cenários — concluída
 
 - Comparar o cenário-base e múltiplas estratégias de amortização em uma tabela.
 - Informar aporte total, juros economizados, desembolso futuro, quitação, prazo,
   prestação e saldo para cada estratégia.
 
-### 0.9.3 — Meta de quitação
+### 0.9.3 — Meta de quitação — concluída
 
 - Encontrar, por busca numérica, o menor aporte único, mensal ou anual para
   quitar até uma data desejada.

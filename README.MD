@@ -101,6 +101,25 @@ O comando informa juros economizados e saldos antes/depois do aporte; no modo
 próximas prestações. Em aportes recorrentes, o saldo após amortizar é o saldo na
 data final informada em `--ate`.
 
+Para comparar estratégias nomeadas, repita `--estrategia` no formato
+`NOME:VALOR:DATA:MODO[:FREQUENCIA:ATE]`:
+
+```bash
+uv run python main.py comparar \
+  --estrategia 'Prazo:10000:2026-08-10:prazo' \
+  --estrategia 'Mensal:500:2026-08-10:prestacao:mensal:2026-10-10'
+```
+
+Para encontrar o menor aporte que quite o contrato até uma data, use:
+
+```bash
+uv run python main.py planejar --meta-quitacao 2045-02-10 --data 2026-08-10
+```
+
+Em recorrências de planejamento, a data de `--meta-quitacao` também é usada
+como última data do aporte quando `--ate` não for informado. Use `--ate` apenas
+para encerrar os aportes antes da meta.
+
 ---
 
 # Roadmap

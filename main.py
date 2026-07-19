@@ -8,12 +8,14 @@ from pathlib import Path
 import typer
 
 from simulador import (
+    comparar_estrategias,
+    criar_agenda_estrategia,
     criar_cenario_padrao,
     criar_graficos,
     comparar_projecoes,
+    encontrar_aporte_minimo_quitacao,
     exportar_projecao_csv,
     exportar_graficos,
-    gerar_amortizacoes_recorrentes,
     gerar_resumo_financeiro,
     identificar_parcelas_validas,
     ler_extrato_csv,
@@ -24,9 +26,40 @@ from simulador import (
     renderizar_relatorio_markdown,
     renderizar_relatorio_txt,
 )
-from modelos import AmortizacaoExtraordinaria, ModoAmortizacao
+from modelos import (
+    AmortizacaoExtraordinaria,
+    CenarioProjecao,
+    EstrategiaAmortizacao,
+    FrequenciaAmortizacao,
+    MetaQuitacao,
+    ModoAmortizacao,
+)
 
 app = typer.Typer(help="Simulador de financiamento imobiliário do Banco do Brasil.")
+
+AJUDA_ESTRATEGIA = """Formato de --estrategia
+
+Repita a opção uma vez para cada cenário a comparar. Ela não pode ser combinada
+com --valor, --data, --modo, --frequencia, --ate ou --amortizacao.
+
+Estratégia única:
+  NOME:VALOR:DATA:MODO
+
+Estratégia recorrente:
+  NOME:VALOR:DATA:MODO:FREQUENCIA:ATE
+
+Campos:
+  NOME        identificador único, sem o caractere ':'
+  VALOR       decimal positivo, por exemplo 10000 ou 500.50
+  DATA        primeira data do aporte, no formato AAAA-MM-DD
+  MODO        prazo, prestacao ou parcelas
+  FREQUENCIA  mensal ou anual
+  ATE         última data do aporte, no formato AAAA-MM-DD
+
+Exemplos:
+  --estrategia 'Prazo:10000:2026-08-10:prazo'
+  --estrategia 'Mensal:500:2026-08-10:prestacao:mensal:2026-10-10'
+"""
 
 
 def _historico(csv: Path):
@@ -62,8 +95,14 @@ def _modo(valor: str) -> ModoAmortizacao:
     return cast(ModoAmortizacao, valor)
 
 
+def _frequencia(valor: str) -> FrequenciaAmortizacao:
+    if valor not in {"unica", "mensal", "anual"}:
+        raise typer.BadParameter("Use 'unica', 'mensal' ou 'anual'.")
+    return cast(FrequenciaAmortizacao, valor)
+
+
 def _amortizacao_programada(
-    valor: str, modo: ModoAmortizacao, cenario: object
+    valor: str, modo: ModoAmortizacao, cenario: CenarioProjecao
 ) -> AmortizacaoExtraordinaria:
     try:
         data_texto, valor_texto = valor.split(":", maxsplit=1)
@@ -73,10 +112,132 @@ def _amortizacao_programada(
     if valor_decimal is None:
         raise typer.BadParameter("O valor da amortização é obrigatório.")
     try:
-        data = normalizar_data_amortizacao(_data(data_texto), cenario)  # type: ignore[arg-type]
+        data = normalizar_data_amortizacao(_data(data_texto), cenario)
     except ValueError as erro:
         raise typer.BadParameter(str(erro)) from erro
     return AmortizacaoExtraordinaria(data, valor_decimal, modo)
+
+
+def _criar_agenda_por_opcoes(
+    valor: str | None,
+    data: str | None,
+    modo: ModoAmortizacao,
+    frequencia: str,
+    ate: str | None,
+    amortizacao: list[str],
+    cenario: CenarioProjecao,
+) -> list[AmortizacaoExtraordinaria]:
+    """Converte as opções compartilhadas da CLI em uma agenda validada."""
+    if amortizacao:
+        if (
+            valor is not None
+            or data is not None
+            or ate is not None
+            or frequencia != "unica"
+        ):
+            raise typer.BadParameter("Use apenas --amortizacao para agenda programada.")
+        return [_amortizacao_programada(item, modo, cenario) for item in amortizacao]
+
+    if valor is None:
+        raise typer.BadParameter("Informe --valor ou ao menos um --amortizacao.")
+    valor_decimal = _tr_decimal(valor)
+    if valor_decimal is None or valor_decimal <= 0:
+        raise typer.BadParameter("O valor da amortização deve ser positivo.")
+    frequencia_validada = _frequencia(frequencia)
+    if frequencia_validada == "unica" and ate is not None:
+        raise typer.BadParameter("--ate é aceito apenas para amortizações recorrentes.")
+    if frequencia_validada != "unica" and ate is None:
+        raise typer.BadParameter("Informe --ate para amortizações recorrentes.")
+    try:
+        estrategia = EstrategiaAmortizacao(
+            nome="Estratégia informada na linha de comando",
+            valor=valor_decimal,
+            data_inicio=_data(data) if data else cenario.data_inicio,
+            modo=modo,
+            frequencia=frequencia_validada,
+            data_fim=_data(ate) if ate else None,
+        )
+        return criar_agenda_estrategia(cenario, estrategia)
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+
+
+def _estrategia_por_texto(
+    valor: str, cenario: CenarioProjecao
+) -> EstrategiaAmortizacao:
+    """Lê ``NOME:VALOR:DATA:MODO[:FREQUENCIA:ATE]`` para comparação."""
+    partes = valor.split(":")
+    if len(partes) not in {4, 6}:
+        raise typer.BadParameter(
+            "Use NOME:VALOR:AAAA-MM-DD:MODO[:FREQUENCIA:AAAA-MM-DD]."
+        )
+    nome, valor_texto, data_texto, modo_texto = partes[:4]
+    frequencia = "unica" if len(partes) == 4 else partes[4]
+    fim = None if len(partes) == 4 else partes[5]
+    valor_decimal = _tr_decimal(valor_texto)
+    if valor_decimal is None or valor_decimal <= 0:
+        raise typer.BadParameter("O valor da estratégia deve ser positivo.")
+    try:
+        return EstrategiaAmortizacao(
+            nome=nome,
+            valor=valor_decimal,
+            data_inicio=_data(data_texto),
+            data_fim=_data(fim) if fim else None,
+            modo=_modo(modo_texto),
+            frequencia=_frequencia(frequencia),
+        )
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+
+
+def _estrategia_para_meta_quitacao(
+    data: str | None,
+    modo: str,
+    frequencia: str,
+    ate: str | None,
+    cenario: CenarioProjecao,
+) -> EstrategiaAmortizacao:
+    """Cria a estratégia cujo valor será calculado pelo planejador."""
+    frequencia_validada = _frequencia(frequencia)
+    if frequencia_validada != "unica" and ate is None:
+        raise typer.BadParameter("Informe --ate para uma estratégia recorrente.")
+    if frequencia_validada == "unica" and ate is not None:
+        raise typer.BadParameter("--ate é aceito apenas para estratégias recorrentes.")
+    try:
+        return EstrategiaAmortizacao(
+            nome="Meta de quitação",
+            valor=Decimal("0.00"),
+            data_inicio=_data(data) if data else cenario.data_inicio,
+            data_fim=_data(ate) if ate else None,
+            modo=_modo(modo),
+            frequencia=frequencia_validada,
+        )
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+
+
+def _tabela(cabecalhos: tuple[str, ...], linhas: list[tuple[str, ...]]) -> str:
+    """Renderiza uma tabela de terminal com colunas calculadas pelos dados."""
+    larguras = [
+        max(len(cabecalho), *(len(linha[indice]) for linha in linhas))
+        for indice, cabecalho in enumerate(cabecalhos)
+    ]
+    cabecalho = " | ".join(
+        texto.ljust(larguras[indice]) for indice, texto in enumerate(cabecalhos)
+    )
+    separador = "-+-".join("-" * largura for largura in larguras)
+    dados = [
+        " | ".join(
+            (
+                texto.ljust(larguras[indice])
+                if indice == 0
+                else texto.rjust(larguras[indice])
+            )
+            for indice, texto in enumerate(linha)
+        )
+        for linha in linhas
+    ]
+    return "\n".join([cabecalho, separador, *dados])
 
 
 @app.command()
@@ -176,41 +337,9 @@ def amortizar(
     modo_validado = _modo(modo)
     historico = _historico(csv)
     cenario = criar_cenario_padrao(historico)
-    if amortizacao:
-        if (
-            valor is not None
-            or data is not None
-            or ate is not None
-            or frequencia != "unica"
-        ):
-            raise typer.BadParameter("Use apenas --amortizacao para agenda programada.")
-        agenda = [
-            _amortizacao_programada(item, modo_validado, cenario)
-            for item in amortizacao
-        ]
-    else:
-        if valor is None:
-            raise typer.BadParameter("Informe --valor ou ao menos um --amortizacao.")
-        try:
-            inicio = normalizar_data_amortizacao(
-                _data(data) if data else cenario.data_inicio, cenario
-            )
-            fim = normalizar_data_amortizacao(_data(ate), cenario) if ate else inicio
-        except ValueError as erro:
-            raise typer.BadParameter(str(erro)) from erro
-        if fim < inicio:
-            raise typer.BadParameter("--ate não pode ser anterior à data inicial.")
-        meses = {"unica": 1, "mensal": 1, "anual": 12}.get(frequencia)
-        if meses is None:
-            raise typer.BadParameter("Use 'unica', 'mensal' ou 'anual'.")
-        if frequencia != "unica" and ate is None:
-            raise typer.BadParameter("Informe --ate para amortizações recorrentes.")
-        valor_decimal = _tr_decimal(valor)
-        if valor_decimal is None:
-            raise typer.BadParameter("O valor da amortização é obrigatório.")
-        agenda = gerar_amortizacoes_recorrentes(
-            valor_decimal, inicio, fim, modo_validado, meses
-        )
+    agenda = _criar_agenda_por_opcoes(
+        valor, data, modo_validado, frequencia, ate, amortizacao, cenario
+    )
     projecao_original = projetar_contrato(cenario)
     projecao = projetar_com_amortizacoes(cenario, agenda)
     ultima = projecao.iloc[-1]
@@ -272,47 +401,69 @@ def comparar(
     frequencia: str = typer.Option("unica", "--frequencia"),
     ate: str | None = typer.Option(None, "--ate"),
     amortizacao: list[str] = typer.Option([], "--amortizacao"),
+    estrategia: list[str] = typer.Option(
+        [],
+        "--estrategia",
+        metavar="FORMATO",
+        help=(
+            "Repita por cenário. Use NOME:VALOR:DATA:MODO ou "
+            "NOME:VALOR:DATA:MODO:FREQUENCIA:ATE. "
+            "Execute com --estrategia --help para detalhes e exemplos."
+        ),
+    ),
     csv: Path = typer.Option(Path("extrato.csv"), "--csv"),
 ) -> None:
-    """Compara a projeção original com um cenário de amortização."""
+    """Compara uma estratégia ou múltiplas estratégias ao cenário-base."""
+    if estrategia == ["--help"]:
+        typer.echo(AJUDA_ESTRATEGIA)
+        return
     modo_validado = _modo(modo)
     historico = _historico(csv)
     cenario = criar_cenario_padrao(historico)
-    if amortizacao:
-        if (
-            valor is not None
-            or data is not None
-            or ate is not None
-            or frequencia != "unica"
-        ):
-            raise typer.BadParameter("Use apenas --amortizacao para agenda programada.")
-        agenda = [
-            _amortizacao_programada(item, modo_validado, cenario)
-            for item in amortizacao
-        ]
-    else:
-        if valor is None:
-            raise typer.BadParameter("Informe --valor ou ao menos um --amortizacao.")
-        try:
-            inicio = normalizar_data_amortizacao(
-                _data(data) if data else cenario.data_inicio, cenario
+    if estrategia:
+        if valor is not None or data is not None or ate is not None or amortizacao:
+            raise typer.BadParameter(
+                "Use apenas --estrategia para comparar múltiplos cenários."
             )
-            fim = normalizar_data_amortizacao(_data(ate), cenario) if ate else inicio
+        try:
+            resultados = comparar_estrategias(
+                cenario,
+                [_estrategia_por_texto(item, cenario) for item in estrategia],
+            )
         except ValueError as erro:
             raise typer.BadParameter(str(erro)) from erro
-        if fim < inicio:
-            raise typer.BadParameter("--ate não pode ser anterior à data inicial.")
-        meses = {"unica": 1, "mensal": 1, "anual": 12}.get(frequencia)
-        if meses is None:
-            raise typer.BadParameter("Use 'unica', 'mensal' ou 'anual'.")
-        if frequencia != "unica" and ate is None:
-            raise typer.BadParameter("Informe --ate para amortizações recorrentes.")
-        valor_decimal = _tr_decimal(valor)
-        if valor_decimal is None:
-            raise typer.BadParameter("O valor da amortização é obrigatório.")
-        agenda = gerar_amortizacoes_recorrentes(
-            valor_decimal, inicio, fim, modo_validado, meses
+        typer.echo("COMPARAÇÃO DE ESTRATÉGIAS")
+        typer.echo(
+            _tabela(
+                (
+                    "Estratégia",
+                    "Aporte total",
+                    "Juros economizados",
+                    "Desembolso futuro",
+                    "Quitação",
+                    "Prazo abatido",
+                    "Próxima prestação",
+                    "Saldo",
+                ),
+                [
+                    (
+                        resultado.estrategia.nome,
+                        f"R$ {resultado.aporte_total:.2f}",
+                        f"R$ {resultado.juros_economizados:.2f}",
+                        f"R$ {resultado.desembolso_futuro:.2f}",
+                        f"{resultado.data_quitacao:%d/%m/%Y}",
+                        f"{resultado.meses_abatidos} meses",
+                        f"R$ {resultado.proxima_prestacao:.2f}",
+                        f"R$ {resultado.saldo_devedor:.2f}",
+                    )
+                    for resultado in resultados
+                ],
+            )
         )
+        return
+    agenda = _criar_agenda_por_opcoes(
+        valor, data, modo_validado, frequencia, ate, amortizacao, cenario
+    )
     projecao_original = projetar_contrato(cenario)
     projecao_cenario = projetar_com_amortizacoes(cenario, agenda)
     resumo = comparar_projecoes(projecao_original, projecao_cenario)
@@ -361,6 +512,45 @@ def comparar(
                 f"com amortização R$ {com_amortizacao.Prestação:.2f}; "
                 f"diferença R$ {diferenca:.2f}."
             )
+
+
+@app.command()
+def planejar(
+    meta_quitacao: str = typer.Option(
+        ..., "--meta-quitacao", help="Data máxima de quitação AAAA-MM-DD."
+    ),
+    data: str | None = typer.Option(None, "--data", help="Início dos aportes."),
+    modo: str = typer.Option("prazo", "--modo"),
+    frequencia: str = typer.Option("unica", "--frequencia"),
+    ate: str | None = typer.Option(None, "--ate", help="Fim da recorrência."),
+    csv: Path = typer.Option(Path("extrato.csv"), "--csv"),
+) -> None:
+    """Encontra o menor aporte para atingir uma data de quitação-alvo."""
+    historico = _historico(csv)
+    cenario = criar_cenario_padrao(historico)
+    data_meta = _data(meta_quitacao)
+    frequencia_validada = _frequencia(frequencia)
+    data_final_aportes = (
+        ate if ate is not None or frequencia_validada == "unica" else meta_quitacao
+    )
+    try:
+        resultado = encontrar_aporte_minimo_quitacao(
+            cenario,
+            MetaQuitacao(data_meta),
+            _estrategia_para_meta_quitacao(
+                data, modo, frequencia, data_final_aportes, cenario
+            ),
+        )
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+    typer.echo("PLANEJAMENTO — META DE QUITAÇÃO")
+    typer.echo(f"Meta de quitação: {data_meta:%d/%m/%Y}.")
+    if resultado.meta_ja_cumprida:
+        typer.echo("O cenário-base já atende à meta; aporte necessário: R$ 0.00.")
+    else:
+        typer.echo(f"Aporte mínimo por ocorrência: R$ {resultado.valor_minimo:.2f}.")
+        typer.echo(f"Frequência: {resultado.estrategia.frequencia}.")
+    typer.echo(f"Quitação obtida: {resultado.data_quitacao:%d/%m/%Y}.")
 
 
 if __name__ == "__main__":

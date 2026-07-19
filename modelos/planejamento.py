@@ -24,8 +24,14 @@ class EstrategiaAmortizacao:
     def __post_init__(self) -> None:
         if not self.nome.strip() or self.valor < 0:
             raise ValueError("Estratégia deve possuir nome e valor não negativo.")
+        if self.modo not in {"prazo", "prestacao"}:
+            raise ValueError("O modo deve ser 'prazo' ou 'prestacao'.")
+        if self.frequencia not in {"unica", "mensal", "anual"}:
+            raise ValueError("Use frequência 'unica', 'mensal' ou 'anual'.")
         if self.frequencia != "unica" and self.data_fim is None:
             raise ValueError("Estratégias recorrentes exigem data final.")
+        if self.frequencia == "unica" and self.data_fim is not None:
+            raise ValueError("Estratégias únicas não aceitam data final.")
 
 
 @dataclass(frozen=True, slots=True)

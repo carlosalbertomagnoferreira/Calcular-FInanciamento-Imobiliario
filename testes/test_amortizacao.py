@@ -2,8 +2,11 @@ from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
-from modelos import AmortizacaoExtraordinaria
+import pytest
+
+from modelos import AmortizacaoExtraordinaria, EstrategiaAmortizacao
 from simulador import (
+    criar_agenda_estrategia,
     criar_cenario_padrao,
     gerar_amortizacoes_recorrentes,
     identificar_parcelas_validas,
@@ -63,3 +66,60 @@ def test_gera_agendas_mensal_e_anual() -> None:
         date(2026, 10, 10),
     ]
     assert len(anual) == 3
+
+
+def test_cria_agenda_de_estrategia_normalizando_datas() -> None:
+    cenario = _cenario()
+    estrategia = EstrategiaAmortizacao(
+        nome="Aporte mensal",
+        valor=Decimal("100"),
+        data_inicio=date(2026, 8, 2),
+        data_fim=date(2026, 10, 28),
+        modo="prazo",
+        frequencia="mensal",
+    )
+
+    agenda = criar_agenda_estrategia(cenario, estrategia)
+
+    assert [evento.data for evento in agenda] == [
+        date(2026, 8, 10),
+        date(2026, 9, 10),
+        date(2026, 10, 10),
+    ]
+
+
+def test_estrategia_recorrente_rejeita_data_final_anterior() -> None:
+    cenario = _cenario()
+    estrategia = EstrategiaAmortizacao(
+        nome="Aporte mensal",
+        valor=Decimal("100"),
+        data_inicio=date(2026, 10, 10),
+        data_fim=date(2026, 8, 10),
+        modo="prazo",
+        frequencia="mensal",
+    )
+
+    with pytest.raises(ValueError, match="data final"):
+        criar_agenda_estrategia(cenario, estrategia)
+
+
+def test_estrategia_unica_nao_aceita_data_final() -> None:
+    with pytest.raises(ValueError, match="únicas"):
+        EstrategiaAmortizacao(
+            nome="Aporte único",
+            valor=Decimal("100"),
+            data_inicio=date(2026, 8, 10),
+            data_fim=date(2026, 9, 10),
+            modo="prazo",
+        )
+
+
+def test_estrategia_rejeita_frequencia_invalida_em_tempo_de_execucao() -> None:
+    with pytest.raises(ValueError, match="frequência"):
+        EstrategiaAmortizacao(
+            nome="Inválida",
+            valor=Decimal("100"),
+            data_inicio=date(2026, 8, 10),
+            modo="prazo",
+            frequencia="semanal",  # type: ignore[arg-type]
+        )
