@@ -11,6 +11,7 @@ from simulador.amortizacao import (
 from simulador.exportacao import exportar_projecao_csv
 from simulador.graficos import criar_graficos, exportar_graficos
 from simulador.leitor import ler_extrato_csv
+from simulador.logging import configurar_logging
 from simulador.parcelas import identificar_parcelas_validas
 from simulador.projecao import criar_cenario_padrao, projetar_contrato
 from simulador.planejamento import (
@@ -40,6 +41,7 @@ __all__ = [
     "exportar_graficos",
     "identificar_parcelas_validas",
     "ler_extrato_csv",
+    "configurar_logging",
     "criar_cenario_padrao",
     "encontrar_aporte_minimo_quitacao",
     "encontrar_aporte_minimo_prestacao",

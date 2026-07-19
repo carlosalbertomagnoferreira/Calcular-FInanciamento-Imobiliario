@@ -47,3 +47,88 @@ def test_planejar_exige_apenas_uma_meta() -> None:
 
     assert resultado.exit_code != 0
     assert "exatamente uma meta" in resultado.output
+
+
+def test_comandos_de_consulta_e_exportacao(tmp_path: Path) -> None:
+    csv_projecao = tmp_path / "projecao.csv"
+    diretorio_graficos = tmp_path / "graficos"
+    comandos = [
+        (
+            ["validar", "--csv", str(RAIZ_PROJETO / "extrato.csv")],
+            "Parcelas válidas: 125",
+        ),
+        (
+            [
+                "projetar",
+                "--csv",
+                str(RAIZ_PROJETO / "extrato.csv"),
+                "--saida",
+                str(csv_projecao),
+            ],
+            "Projeção exportada para:",
+        ),
+        (
+            [
+                "relatorio",
+                "--csv",
+                str(RAIZ_PROJETO / "extrato.csv"),
+                "--formato",
+                "txt",
+            ],
+            "RELATÓRIO FINANCEIRO",
+        ),
+        (
+            [
+                "graficos",
+                "--csv",
+                str(RAIZ_PROJETO / "extrato.csv"),
+                "--diretorio",
+                str(diretorio_graficos),
+            ],
+            "Gráficos gerados em:",
+        ),
+    ]
+
+    for argumentos, texto_esperado in comandos:
+        resultado = runner.invoke(app, argumentos)
+        assert resultado.exit_code == 0
+        assert texto_esperado in resultado.output
+
+    assert csv_projecao.exists()
+    assert len(list(diretorio_graficos.glob("*.png"))) == 6
+
+
+def test_amortizar_e_comparar_cenarios() -> None:
+    amortizar = runner.invoke(
+        app,
+        [
+            "amortizar",
+            "--valor",
+            "100",
+            "--data",
+            "2026-08-10",
+            "--modo",
+            "parcelas",
+            "--csv",
+            str(RAIZ_PROJETO / "extrato.csv"),
+        ],
+    )
+    comparar = runner.invoke(
+        app,
+        [
+            "comparar",
+            "--estrategia",
+            "Única:100:2026-08-10:prazo",
+            "--estrategia",
+            "Mensal:50:2026-08-10:prestacao:mensal:2026-10-10",
+            "--csv",
+            str(RAIZ_PROJETO / "extrato.csv"),
+        ],
+    )
+
+    assert amortizar.exit_code == 0
+    assert "Próximas cinco prestações:" in amortizar.output
+    assert comparar.exit_code == 0
+    assert "COMPARAÇÃO DE ESTRATÉGIAS" in comparar.output
+    assert "Única" in comparar.output
+    assert "Mensal" in comparar.output

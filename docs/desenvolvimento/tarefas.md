@@ -275,11 +275,27 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Versão 1.0
 
+## 1.0.1 — Observabilidade operacional
+
+- [x] Configurar logging padronizado e opt-in na CLI
+- [x] Cobrir configuração e mensagens operacionais com testes
+
+## 1.0.2 — Regressão e qualidade
+
+- [x] Medir cobertura automatizada
+- [x] Atingir cobertura de pelo menos 90%
+- [x] Adicionar cenários de regressão do extrato de referência e da CLI
+
+## 1.0.3 — Documentação e release
+
+- [x] Revisar documentação de uso e referência de comandos
+- [x] Executar validação final de release
+
 Critérios para release:
 
-- [ ] Todos os testes aprovados
-- [ ] Cobertura > 90%
-- [ ] Ruff OK
-- [ ] Black OK
-- [ ] MyPy OK
-- [ ] Documentação completa
+- [x] Todos os testes aprovados
+- [x] Cobertura > 90%
+- [x] Ruff OK
+- [x] Black OK
+- [x] MyPy OK
+- [x] Documentação completa

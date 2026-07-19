@@ -30,6 +30,17 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 - Cenário padrão de projeção passou a usar a média das últimas 12 TRs válidas
 
+## [1.0.0] - 2026-07-19
+
+### Added
+
+- Logging opt-in na CLI por meio de `--log-level`
+- Cobertura mínima obrigatória de 90% e regressões para comandos públicos
+
+### Changed
+
+- Documentação de arquitetura e comandos revisada para a primeira versão estável
+
 ## [0.9.0] - 2026-07-19
 
 ### Added

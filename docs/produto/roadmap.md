@@ -350,34 +350,38 @@ projeção resultante; para uma meta inviável, retornar uma explicação clara.
 
 ---
 
-# Versão 1.0
+# Versão 1.0 — concluída
 ## Simulador Completo
 
 ### Objetivos
 
 Primeira versão estável.
 
-### Funcionalidades
+As funcionalidades financeiras, a CLI, a exportação e a documentação entregues
+até a versão 0.9 compõem a base da primeira versão estável. A 1.0 concentra-se
+em confiabilidade operacional, regressão e critérios formais de release.
 
-Reconstrução.
+### 1.0.1 — Observabilidade operacional — concluída
 
-Calibração.
+- Configurar logging padronizado e opt-in na CLI.
+- Garantir mensagens de erro acionáveis sem poluir a saída de resultados.
 
-Projeção.
+### 1.0.2 — Regressão e qualidade — concluída
 
-Amortização.
+- Medir e elevar a cobertura automatizada para pelo menos 90%.
+- Adicionar cenários de regressão com o extrato de referência e comandos da CLI.
+- Consolidar validações financeiras já existentes como suíte de release.
 
-Gráficos.
+### 1.0.3 — Documentação e release — concluída
 
-Relatórios.
+- Revisar a documentação de uso e referência de comandos.
+- Executar os critérios de qualidade e publicar a versão estável.
 
-CLI completa.
+### Fora do escopo
 
-Exportação.
-
-Testes.
-
-Documentação.
+- Calibração avançada permanece adiada até que os componentes históricos
+  pendentes sejam explicados.
+- Conversão automática de PDF permanece planejada para a versão 1.1.
 
 ---
 

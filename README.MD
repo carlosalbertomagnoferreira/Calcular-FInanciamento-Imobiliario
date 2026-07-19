@@ -8,9 +8,9 @@ O objetivo é criar um modelo matemático do contrato capaz de reproduzir o comp
 
 # Estado atual
 
-O projeto está na versão 0.9. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos, simulações de amortização e planejamento por metas estão disponíveis pela linha de comando.
+O projeto está na versão 1.0. A importação, validação, reconstrução histórica, projeção, relatórios, gráficos, simulações de amortização e planejamento por metas estão disponíveis pela linha de comando.
 
-A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. A versão 0.9 adiciona estratégias nomeadas, comparação de cenários e planejamento do aporte mínimo para metas de quitação ou prestação.
+A reconstrução histórica preserva os valores reportados pelo banco e expõe diagnósticos de juros, prestação e saldo. A projeção parte da parcela 126 e, por padrão, usa a média das últimas 12 TRs válidas; também aceita uma TR mensal personalizada. A versão 1.0 consolida estratégias nomeadas, comparação de cenários, planejamento por metas, logging operacional e uma suíte de regressão com cobertura mínima de 90%.
 
 ---
 
@@ -53,6 +53,13 @@ O `uv` é o único gerenciador de ambiente e dependências adotado. Não usamos 
 ---
 
 # Linha de comando
+
+Para diagnósticos operacionais, adicione `--log-level` antes do comando. Os
+níveis aceitos são `DEBUG`, `INFO`, `WARNING` e `ERROR`; o padrão é `WARNING`.
+
+```bash
+uv run python main.py --log-level INFO validar
+```
 
 Validar o extrato e a sequência de parcelas:
 
@@ -127,7 +134,7 @@ aportes.
 
 # Roadmap
 
-A documentação detalhada está em [docs/index.md](docs/index.md). O planejamento de metas de amortização da versão 0.9 está dividido nas subfases 0.9.1 a 0.9.4 no [roadmap](docs/produto/roadmap.md); a calibração avançada permanece como evolução futura.
+A documentação detalhada está em [docs/index.md](docs/index.md). A versão 1.0 é a primeira versão estável; a calibração avançada permanece como evolução futura.
 
 ---
 

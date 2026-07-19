@@ -392,7 +392,9 @@ relatorio.txt
 
 CLI utilizando Typer.
 
-Comandos previstos:
+Comandos disponíveis:
+
+validar
 
 projetar
 
@@ -404,7 +406,10 @@ amortizar
 
 comparar
 
-dashboard
+planejar
+
+O comando global `--log-level` aceita os níveis `DEBUG`, `INFO`, `WARNING` e
+`ERROR` para diagnóstico operacional, sem alterar a saída financeira padrão.
 
 ---
 

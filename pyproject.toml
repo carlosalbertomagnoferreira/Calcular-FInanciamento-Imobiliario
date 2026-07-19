@@ -1,6 +1,6 @@
 [project]
 name = "calcular-financiamento-apartamento"
-version = "0.9.0"
+version = "1.0.0"
 description = "Simulador de financiamento imobiliário do Banco do Brasil"
 readme = "README.MD"
 requires-python = ">=3.13"
@@ -43,6 +43,7 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["testes"]
 pythonpath = ["."]
+addopts = "--cov=."
 
 [tool.ruff]
 target-version = "py313"
@@ -53,3 +54,6 @@ target-version = ["py313"]
 [tool.mypy]
 python_version = "3.13"
 exclude = "(^|/)extrator2\\.py$"
+
+[tool.coverage.report]
+fail_under = 90

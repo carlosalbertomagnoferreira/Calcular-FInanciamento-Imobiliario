@@ -24,11 +24,13 @@ Cada módulo deverá possuir responsabilidade única.
 
 ---
 
-# Estrutura-alvo do Projeto
+# Estrutura atual do Projeto
 
-Esta é a estrutura a ser criada progressivamente a partir da versão 0.2; ela ainda não representa os arquivos existentes no repositório.
+A estrutura abaixo representa a organização entregue até a versão 1.0. Os
+arquivos de referência `extrato.csv` e `extrato319405086.pdf` permanecem na
+raiz e não são modificados pela aplicação.
 
-financiamento_bb/
+calcular_financiamento_apartamento/
 
 ```
 ├── main.py
@@ -37,35 +39,35 @@ financiamento_bb/
 ├── README.MD
 ├── AGENT.MD
 ├── CLAUDE.md
-│
-├── dados/
-│   ├── extrato.csv
-│   ├── projecao.csv
-│   └── relatorio.csv
+├── CHANGELOG.MD
 │
 ├── simulador/
 │   ├── __init__.py
 │   ├── leitor.py
-│   ├── contrato.py
-│   ├── price.py
-│   ├── tr.py
-│   ├── projetor.py
+│   ├── reconstrucao.py
+│   ├── parcelas.py
+│   ├── calibracao.py
+│   ├── projecao.py
 │   ├── amortizacao.py
+│   ├── comparacao.py
+│   ├── planejamento.py
 │   ├── relatorio.py
-│   ├── exportador.py
+│   ├── exportacao.py
 │   ├── graficos.py
-│   ├── validacao.py
-│   ├── cli.py
-│   └── util.py
+│   ├── calculos.py
+│   ├── excecoes.py
+│   └── logging.py
 │
 ├── modelos/
-│   ├── parcela.py
-│   ├── contrato.py
-│   └── simulacao.py
+│   ├── evento_historico.py
+│   ├── projecao.py
+│   ├── amortizacao.py
+│   ├── comparacao.py
+│   ├── planejamento.py
+│   ├── calibracao.py
+│   └── relatorio.py
 │
 ├── testes/
-│
-├── graficos/
 │
 └── docs/
     ├── index.md

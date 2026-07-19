@@ -2,6 +2,7 @@
 
 from datetime import date
 from decimal import Decimal, InvalidOperation
+import logging
 from typing import cast
 from pathlib import Path
 
@@ -13,6 +14,7 @@ from simulador import (
     criar_cenario_padrao,
     criar_graficos,
     comparar_projecoes,
+    configurar_logging,
     encontrar_aporte_minimo_quitacao,
     encontrar_aporte_minimo_prestacao,
     exportar_projecao_csv,
@@ -38,6 +40,7 @@ from modelos import (
 )
 
 app = typer.Typer(help="Simulador de financiamento imobiliário do Banco do Brasil.")
+logger = logging.getLogger(__name__)
 
 AJUDA_ESTRATEGIA = """Formato de --estrategia
 
@@ -62,6 +65,22 @@ Exemplos:
   --estrategia 'Prazo:10000:2026-08-10:prazo'
   --estrategia 'Mensal:500:2026-08-10:prestacao:mensal:2026-10-10'
 """
+
+
+@app.callback()
+def principal(
+    ctx: typer.Context,
+    log_level: str = typer.Option(
+        "WARNING", "--log-level", help="DEBUG, INFO, WARNING ou ERROR."
+    ),
+) -> None:
+    """Configura a execução comum aos comandos da CLI."""
+    try:
+        configurar_logging(log_level)
+    except ValueError as erro:
+        raise typer.BadParameter(str(erro)) from erro
+    if ctx.invoked_subcommand is not None:
+        logger.info("Executando comando: %s", ctx.invoked_subcommand)
 
 
 def _historico(csv: Path):

@@ -94,15 +94,17 @@ O projeto será dividido em módulos independentes.
 simulador/
 
     leitor.py
-    contrato.py
-    tr.py
-    price.py
-    projetor.py
+    reconstrucao.py
+    parcelas.py
+    calibracao.py
+    projecao.py
     amortizacao.py
+    comparacao.py
+    planejamento.py
     relatorio.py
     graficos.py
-    cli.py
-    util.py
+    exportacao.py
+    logging.py
 
 Cada módulo deve possuir responsabilidade única.
 
@@ -159,8 +161,10 @@ O sistema deverá suportar:
 
 # Linha de comando
 
-O projeto utiliza Typer na CLI. Os comandos `validar`, `projetar` e `relatorio`
-estão disponíveis; os demais serão entregues nas fases correspondentes.
+O projeto utiliza Typer na CLI. Os comandos disponíveis são `validar`,
+`projetar`, `relatorio`, `graficos`, `amortizar`, `comparar` e `planejar`.
+O nível de diagnóstico pode ser definido antes do comando com
+`--log-level DEBUG|INFO|WARNING|ERROR`.
 
 Exemplos:
 
@@ -169,8 +173,8 @@ uv run python main.py projetar
 uv run python main.py relatorio
 
 O comando `projetar` aceita `--saida` para exportar o CSV da projeção.
-O comando `amortizar` está disponível na versão 0.8. A versão 0.9 evoluirá a
-comparação para múltiplas estratégias e incluirá planejamento por meta.
+`comparar` aceita múltiplas estratégias nomeadas e `planejar` encontra o aporte
+mínimo para metas de quitação ou prestação.
 
 ---
 
