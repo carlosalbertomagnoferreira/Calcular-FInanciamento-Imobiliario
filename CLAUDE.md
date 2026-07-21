@@ -178,6 +178,21 @@ Todos devem passar.
 
 ---
 
+# Docker
+
+Ao alterar dependências ou execução em contêiner, também validar:
+
+```bash
+uv lock --check
+docker compose config --quiet
+docker compose build
+```
+
+A imagem de produção deve instalar somente dependências de runtime, executar
+sem root e nunca incluir PDFs ou outros dados bancários.
+
+---
+
 # Performance
 
 Este projeto trabalha com aproximadamente 360 parcelas.
@@ -247,6 +262,10 @@ Todo cálculo financeiro deve possuir:
 - validação numérica
 
 Nunca implementar funcionalidades financeiras sem testes.
+
+Testes de PDF não podem depender de um documento bancário versionado. A suíte
+padrão deve usar dados anonimizados e mocks determinísticos; integrações com PDF
+real são opcionais por meio de `EXTRATO_PDF_TESTE`.
 
 ---
 

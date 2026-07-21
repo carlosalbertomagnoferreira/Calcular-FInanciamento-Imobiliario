@@ -57,7 +57,7 @@ O Pandas oferece:
 
 # ADR-003
 
-## Não alterar o CSV original
+## Não alterar as fontes de entrada nem versionar PDFs bancários
 
 ### Status
 
@@ -65,11 +65,18 @@ Aceito
 
 ### Motivação
 
-O PDF de referência é a fonte primária do extrato. O CSV gerado a partir dele é a fonte de trabalho da aplicação.
+O PDF textual fornecido localmente pelo usuário é uma fonte externa do extrato.
+Por conter dados bancários, ele não deve ser incluído no repositório e permanece
+ignorado pelo Git. `extrato.csv` é a referência anonimizada versionada e a fonte
+de trabalho da aplicação.
 
-Nenhum dos dois arquivos de referência pode ser alterado pela aplicação. Toda transformação deverá ocorrer sobre cópias em memória ou em arquivos de saída distintos.
+Nenhuma fonte de entrada pode ser alterada pela aplicação. O dashboard processa
+uploads em diretório temporário, e o comando `extrair-pdf` grava o CSV em um
+caminho de saída distinto indicado pelo usuário.
 
-A extração definitiva do PDF será implementada em fase futura sem sobrescrever os arquivos de referência.
+Os testes unitários simulam a saída textual do `pdfplumber` com o CSV anonimizado.
+Um PDF externo pode ser usado apenas em integração opcional configurada por
+`EXTRATO_PDF_TESTE`, sem cópia ou persistência pelo projeto.
 
 ---
 
@@ -484,6 +491,37 @@ O contrato de referência possui vencimento regular no dia 10 de cada mês. A pa
 ### Consequências
 
 Eventos fora do dia 10 não são aceitos automaticamente como parcelas regulares na sequência ancorada. Eles continuam preservados como eventos históricos para auditoria.
+
+---
+
+# ADR-023
+
+## Imagem Docker mínima e execução sem privilégios
+
+### Status
+
+Aceito
+
+### Contexto
+
+O dashboard e a CLI precisam de uma forma reproduzível de execução sem carregar
+bibliotecas previstas apenas para versões futuras nem expor dados bancários no
+artefato distribuído.
+
+### Decisão
+
+Usar um Dockerfile multi-stage baseado em Python 3.13 slim. O `uv.lock` define as
+dependências, o estágio final recebe somente runtime e código necessário, e o
+Streamlit é o processo padrão. O Compose aplica usuário sem root, raiz somente
+leitura, `tmpfs`, remoção de capabilities, `no-new-privileges` e volume local
+ignorado para a CLI.
+
+### Consequências
+
+Dependências futuras somente serão adicionadas quando houver código que as use.
+PDFs, testes, documentação, caches e dados locais não entram na imagem. Alterações
+de dependências ou inicialização devem validar lock, Compose, build, healthcheck
+e smoke test da CLI.
 
 ---
 

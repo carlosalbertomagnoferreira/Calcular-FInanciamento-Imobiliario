@@ -1,6 +1,7 @@
 """Testes da entrada de arquivos enviados ao dashboard."""
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -17,11 +18,12 @@ def test_le_csv_enviado_em_diretorio_temporario() -> None:
     assert len(extrato) == 164
 
 
-def test_le_pdf_enviado_em_diretorio_temporario() -> None:
-    extrato = ler_extrato_enviado(
-        "contrato.pdf", (RAIZ_PROJETO / "extrato319405086.pdf").read_bytes()
-    )
+def test_le_pdf_enviado_em_diretorio_temporario(
+    pdf_textual_bb_mock: MagicMock,
+) -> None:
+    extrato = ler_extrato_enviado("contrato.pdf", b"%PDF-1.4\n%%EOF\n")
 
+    assert pdf_textual_bb_mock.call_count == 1
     assert len(extrato) == 164
 
 

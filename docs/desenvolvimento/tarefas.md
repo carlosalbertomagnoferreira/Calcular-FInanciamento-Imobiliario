@@ -215,10 +215,14 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 
 # Fase 9 — PDF — concluída
 
-- [x] Ler PDF textual
+- [x] Ler PDF textual fornecido localmente pelo usuário
 - [x] Extrair tabela financeira
 - [x] Validar dados pelo leitor canônico
 - [x] Exportar CSV separado
+- [x] Manter PDFs bancários fora do versionamento por privacidade
+- [x] Remover dependência do PDF privado da suíte padrão
+- [x] Simular a extração textual com o CSV anonimizado
+- [x] Disponibilizar integração opcional por `EXTRATO_PDF_TESTE`
 
 ---
 
@@ -227,7 +231,7 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 ## 1.2.1 — Fundação e upload
 
 - [x] Criar dashboard Streamlit
-- [x] Upload exclusivo de PDF ou CSV
+- [x] Upload exclusivo de PDF fornecido pelo usuário ou CSV
 - [x] Isolar uploads em arquivos temporários
 - [x] Validar entradas e exibir erros acionáveis
 
@@ -241,12 +245,28 @@ As tarefas somente poderão ser marcadas como concluídas quando:
 - [x] Download CSV
 - [x] Download Relatório
 - [x] Documentar e testar a interface
+- [x] Executar smoke test nativo do Streamlit sem dados privados
 
 ## 1.2.4 — Simulações avançadas
 
 - [x] Amortização
 - [x] Comparação de estratégias
+- [x] Exibir comparação compacta por parcela no dashboard
 - [x] Planejamento por metas
+
+---
+
+# Fase 11 — Docker (versão 1.3)
+
+- [x] Auditar imports e remover dependências diretas sem uso
+- [x] Atualizar e validar `uv.lock`
+- [x] Criar Dockerfile multi-stage com imagem final mínima
+- [x] Executar como usuário sem privilégios
+- [x] Adicionar healthcheck e configuração para filesystem somente leitura
+- [x] Criar `compose.yaml` para dashboard e CLI
+- [x] Criar `.dockerignore` sem PDFs, dados ou artefatos de desenvolvimento
+- [x] Documentar dashboard, CLI, portas, volumes, UID/GID e privacidade
+- [x] Validar build, healthcheck e smoke test da imagem
 
 ---
 

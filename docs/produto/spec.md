@@ -1,7 +1,7 @@
 # Especificação Funcional
 ## Simulador de Financiamento Imobiliário Banco do Brasil
 
-Versão: 1.2
+Versão: 1.3
 
 ---
 
@@ -421,14 +421,29 @@ Tecnologia:
 
 Streamlit
 
-Permite upload exclusivo de um PDF textual ou CSV, processado em diretório
-temporário e validado pelo mesmo fluxo da CLI. Após a validação, exibe o
-resumo, a projeção, seis gráficos e downloads de CSV e relatório em Markdown.
+Permite upload exclusivo de um PDF textual ou CSV fornecido pelo usuário,
+processado em diretório temporário e validado pelo mesmo fluxo da CLI. PDFs
+bancários não são versionados nem mantidos pela aplicação. Após a validação,
+exibe o resumo, a projeção, seis gráficos e downloads de CSV e relatório em
+Markdown.
 
 As simulações avançadas aceitam aportes únicos, mensais ou anuais, nos modos
 de prazo e prestação. O planejamento de metas calcula o aporte mínimo para
 quitação ou prestação; em metas de quitação, exibe as parcelas recalculadas até
 a data-alvo.
+
+A comparação web por parcela deverá ser compacta e exibir:
+
+- número da parcela;
+- data;
+- saldo corrigido simulado;
+- prestação total simulada;
+- saldo final simulado;
+- economia na prestação contra o cenário-base;
+- redução do saldo contra o cenário-base.
+
+Economia e redução são calculadas como valor do cenário-base menos valor
+simulado, de modo que resultados positivos expressem benefício da estratégia.
 
 ---
 
@@ -436,8 +451,15 @@ a data-alvo.
 
 O comando `extrair-pdf --pdf ARQUIVO --saida CSV` deverá extrair as linhas
 financeiras de um PDF textual do Banco do Brasil, gerar um CSV separado no
-layout canônico e validá-lo pelo mesmo leitor usado pela aplicação. Os arquivos
-de referência não poderão ser sobrescritos automaticamente.
+layout canônico e validá-lo pelo mesmo leitor usado pela aplicação. O PDF deve
+ser fornecido localmente pelo usuário, não poderá ser versionado e não será
+alterado pela aplicação. O CSV de referência também não poderá ser sobrescrito
+automaticamente.
+
+O argumento `--pdf` é obrigatório. A suíte automatizada deverá validar a
+extração com texto determinístico derivado do CSV anonimizado, sem exigir um PDF
+real. Um teste de integração opcional poderá receber o caminho externo pela
+variável `EXTRATO_PDF_TESTE`.
 
 Fluxo:
 
@@ -458,6 +480,26 @@ CSV
 ↓
 
 Reconstrução
+
+---
+
+# Execução em Docker
+
+A versão 1.3 deverá disponibilizar uma imagem de produção para o dashboard e a
+CLI. O dashboard Streamlit será o processo padrão e escutará na porta 8501.
+
+A imagem deverá:
+
+- utilizar Python 3.13;
+- instalar o conjunto bloqueado de dependências de produção;
+- executar como usuário sem privilégios;
+- possuir healthcheck;
+- operar com sistema de arquivos raiz somente leitura e `/tmp` efêmero;
+- excluir PDFs, dados particulares e artefatos de desenvolvimento do build;
+- aceitar arquivos da CLI por `/dados`, montado localmente e ignorado pelo Git.
+
+O Compose deverá publicar a porta configurável por `APP_PORT` e permitir o uso
+da CLI por `docker compose run --rm simulador python main.py COMANDO`.
 
 ---
 

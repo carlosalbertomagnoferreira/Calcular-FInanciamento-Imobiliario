@@ -1,7 +1,7 @@
 # Roadmap
 ## Simulador de Financiamento Imobiliário Banco do Brasil
 
-Versão do documento: 1.2
+Versão do documento: 1.3
 
 ---
 
@@ -46,7 +46,8 @@ Criar toda a estrutura inicial.
 - pyproject.toml
 - uv.lock
 - Definição do Python 3.13 como versão oficial
-- Dados de referência (PDF e CSV experimental)
+- CSV de referência anonimizado; PDFs bancários são fornecidos localmente e não
+  são versionados
 
 ### Critério de aceite
 
@@ -395,7 +396,8 @@ Eliminar necessidade de gerar CSV manualmente.
 
 O comando `extrair-pdf` extrai as linhas financeiras do PDF textual, converte a
 ordem visual dos componentes para o layout canônico e valida o CSV gerado antes
-de disponibilizá-lo para simulação.
+de disponibilizá-lo para simulação. O PDF deve ser fornecido localmente pelo
+usuário e não é armazenado no repositório por motivos de privacidade.
 
 ### Fluxo
 
@@ -424,7 +426,7 @@ Streamlit
 
 ### 1.2.1 — Fundação e upload — concluída
 
-- Tela Streamlit para upload exclusivo de CSV ou PDF.
+- Tela Streamlit para upload exclusivo de CSV ou PDF fornecido pelo usuário.
 - Arquivos temporários, sem substituir as fontes de referência.
 - Validação e mensagens de erro acionáveis.
 
@@ -440,12 +442,39 @@ Streamlit
 ### 1.2.4 — Simulações avançadas — concluída
 
 - Amortização e comparação de estratégias na interface.
+- Comparação compacta por parcela entre cenário-base e simulação.
 - Planejamento de metas de quitação e prestação, incluindo aportes únicos ou
   recorrentes e a projeção recalculada.
 
 ---
 
-# Versão 1.3
+# Versão 1.3 — concluída
+## Execução com Docker
+
+### Objetivos
+
+Distribuir o dashboard e a CLI em uma imagem reproduzível, reduzida e segura.
+
+### Entregas
+
+- Remover dependências diretas sem uso no código de produção.
+- Criar imagem multi-stage com Python 3.13 e instalação congelada pelo `uv.lock`.
+- Executar o dashboard como usuário sem privilégios, com healthcheck, raiz
+  somente leitura e diretório temporário efêmero.
+- Disponibilizar a CLI pelo Docker Compose e um volume local ignorado para dados
+  particulares.
+- Excluir PDFs, dados locais, testes, documentação, caches e ferramentas de
+  desenvolvimento da imagem final.
+- Documentar build, execução, configuração, privacidade e diagnóstico.
+
+### Critério de aceite
+
+`docker compose config`, build da imagem, healthcheck do dashboard e um comando
+de smoke test da CLI devem funcionar com o lock de dependências validado.
+
+---
+
+# Versão 1.4
 ## Comparador de Financiamentos
 
 ### Objetivos
@@ -467,7 +496,7 @@ Comparar:
 
 ---
 
-# Versão 1.4
+# Versão 1.5
 ## Banco de Dados
 
 Persistência.
@@ -478,7 +507,7 @@ Depois PostgreSQL.
 
 ---
 
-# Versão 1.5
+# Versão 1.6
 ## API REST
 
 FastAPI.

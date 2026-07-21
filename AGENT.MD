@@ -36,6 +36,11 @@ O CSV possui as colunas:
 O comando `extrair-pdf` converte o PDF textual do BB em um CSV separado e
 validado, sem alterar os arquivos de referência.
 
+Por motivos de privacidade, PDFs de extratos bancários nunca devem ser
+versionados. O PDF deve ser fornecido localmente pelo usuário e permanece
+ignorado pelo Git; somente o CSV de referência anonimizado faz parte do
+repositório.
+
 ---
 
 # Tipo do financiamento
@@ -162,7 +167,8 @@ O sistema deverá suportar:
 # Linha de comando
 
 O projeto utiliza Typer na CLI. Os comandos disponíveis são `validar`,
-`projetar`, `relatorio`, `graficos`, `amortizar`, `comparar` e `planejar`.
+`extrair-pdf`, `projetar`, `relatorio`, `graficos`, `amortizar`, `comparar` e
+`planejar`.
 O nível de diagnóstico pode ser definido antes do comando com
 `--log-level DEBUG|INFO|WARNING|ERROR`.
 
@@ -205,26 +211,38 @@ Preferencialmente utilizar:
 
 pandas
 
-numpy
-
 matplotlib
 
 typer
 
-rich
+pdfplumber
 
-scipy
+streamlit
 
-pytest
+pytest (desenvolvimento)
 
-pydantic
+---
+
+# Docker
+
+A imagem de produção deve:
+
+- utilizar Python 3.13 e dependências bloqueadas em `uv.lock`;
+- instalar apenas dependências de produção;
+- executar como usuário sem privilégios;
+- manter PDFs, dados privados, testes e ferramentas de desenvolvimento fora da
+  imagem;
+- preservar o dashboard como comando padrão e permitir comandos da CLI;
+- possuir healthcheck e sistema de arquivos raiz somente leitura.
+
+As instruções operacionais ficam em `docs/desenvolvimento/docker.md`.
 
 ---
 
 # Objetivo futuro
 
-Criar uma aplicação Streamlit onde o usuário apenas faça upload
-do PDF do Banco do Brasil.
+Criar uma aplicação Streamlit onde o usuário faça upload do seu PDF textual do
+Banco do Brasil, fornecido localmente e nunca versionado no repositório.
 
 Fluxo esperado:
 
@@ -279,7 +297,9 @@ Sempre validar:
 - economia de juros
 - redução de prazo
 
-Os testes devem utilizar dados reais do extrato.
+Os testes automatizados devem utilizar o CSV anonimizado e simular a leitura do
+PDF quando necessário. Um PDF textual real pode ser fornecido opcionalmente por
+`EXTRATO_PDF_TESTE`, mas nunca deve ser versionado ou exigido pela suíte padrão.
 
 ---
 

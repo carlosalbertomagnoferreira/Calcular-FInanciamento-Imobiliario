@@ -4,6 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import cast
 
+import pandas as pd
 import streamlit as st
 
 from modelos import (
@@ -15,6 +16,7 @@ from modelos import (
 )
 from simulador import (
     comparar_estrategias,
+    comparar_parcelas,
     criar_agenda_estrategia,
     criar_cenario_padrao,
     criar_graficos,
@@ -37,17 +39,18 @@ def _moeda(valor: Decimal) -> str:
     return f"R$ {valor:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-def _formatar_tabela_financeira(dados):
+def _formatar_valor_tabela(valor: object) -> object:
+    """Formata um valor financeiro ou uma data para apresentação."""
+    if isinstance(valor, Decimal):
+        return _moeda(valor)
+    if isinstance(valor, date):
+        return valor.strftime("%d/%m/%Y")
+    return valor
+
+
+def _formatar_tabela_financeira(dados: pd.DataFrame) -> pd.DataFrame:
     """Aplica formato brasileiro a datas e valores na tabela de apresentação."""
-    return dados.map(
-        lambda valor: (
-            _moeda(valor)
-            if isinstance(valor, Decimal)
-            else valor.strftime("%d/%m/%Y")
-            if isinstance(valor, date)
-            else valor
-        )
-    )
+    return dados.map(_formatar_valor_tabela)
 
 
 arquivo = st.file_uploader("Extrato", type=["csv", "pdf"])
@@ -116,8 +119,15 @@ else:
                     cenario, criar_agenda_estrategia(cenario, estrategia)
                 )
                 comparacao = comparar_estrategias(cenario, [estrategia])[0]
+                st.subheader("Simulação comparada ao cenário-base")
+                st.caption(
+                    "Economia na prestação e redução do saldo correspondem ao "
+                    "valor do cenário-base menos o valor simulado."
+                )
                 st.dataframe(
-                    _formatar_tabela_financeira(simulacao),
+                    _formatar_tabela_financeira(
+                        comparar_parcelas(analise.projecao, simulacao)
+                    ),
                     use_container_width=True,
                     hide_index=True,
                 )

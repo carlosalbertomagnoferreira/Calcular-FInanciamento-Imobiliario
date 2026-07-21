@@ -14,3 +14,7 @@ htmlcov/
 .venv
 
 *.pdf
+
+# Local data mounted into containers
+dados/
+.env

@@ -82,5 +82,52 @@ def comparar_estrategias(
     return resultados
 
 
+def comparar_parcelas(
+    projecao_base: pd.DataFrame,
+    projecao_simulada: pd.DataFrame,
+) -> pd.DataFrame:
+    """Cria uma visão compacta da simulação comparada parcela a parcela."""
+    colunas_obrigatorias = (
+        "Número da Parcela",
+        "Data",
+        "Saldo Corrigido",
+        "Prestação",
+        "Saldo Final",
+    )
+    for nome, projecao in (
+        ("base", projecao_base),
+        ("simulada", projecao_simulada),
+    ):
+        faltantes = [
+            coluna for coluna in colunas_obrigatorias if coluna not in projecao
+        ]
+        if faltantes:
+            raise ValueError(
+                f"A projeção {nome} não possui as colunas: {', '.join(faltantes)}."
+            )
+        if projecao["Número da Parcela"].duplicated().any():
+            raise ValueError(f"A projeção {nome} possui números de parcela duplicados.")
+
+    base_por_parcela = projecao_base.set_index("Número da Parcela")
+    registros: list[dict[str, object]] = []
+    for _, simulada in projecao_simulada.iterrows():
+        numero = simulada["Número da Parcela"]
+        if numero not in base_por_parcela.index:
+            raise ValueError(f"A parcela {numero} não existe na projeção-base.")
+        base = base_por_parcela.loc[numero]
+        registros.append(
+            {
+                "Número da Parcela": numero,
+                "Data": simulada["Data"],
+                "Saldo Corrigido": simulada["Saldo Corrigido"],
+                "Prestação Total": simulada["Prestação"],
+                "Saldo Final": simulada["Saldo Final"],
+                "Economia na Prestação": base["Prestação"] - simulada["Prestação"],
+                "Redução do Saldo": base["Saldo Final"] - simulada["Saldo Final"],
+            }
+        )
+    return pd.DataFrame.from_records(registros)
+
+
 def _somar(valores: pd.Series) -> Decimal:
     return sum(valores, start=Decimal(0))

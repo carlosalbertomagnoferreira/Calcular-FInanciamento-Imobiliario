@@ -6,7 +6,7 @@ Simulador de Financiamento Imobiliário Banco do Brasil
 
 Versão:
 
-1.2
+1.3
 
 ---
 
@@ -26,15 +26,20 @@ Cada módulo deverá possuir responsabilidade única.
 
 # Estrutura atual do Projeto
 
-A estrutura abaixo representa a organização entregue até a versão 1.2. Os
-arquivos de referência `extrato.csv` e `extrato319405086.pdf` permanecem na
-raiz e não são modificados pela aplicação.
+A estrutura abaixo representa a organização entregue até a versão 1.3.
+`extrato.csv` permanece como referência anonimizada na raiz e não é modificado
+pela aplicação. PDFs bancários são fornecidos localmente pelo usuário, não
+integram a estrutura versionada e são ignorados pelo Git por privacidade.
 
 calcular_financiamento_apartamento/
 
 ```
 ├── main.py
 ├── dashboard.py
+├── Dockerfile
+├── compose.yaml
+├── .dockerignore
+├── .env.example
 ├── pyproject.toml
 ├── uv.lock
 ├── README.MD
@@ -81,7 +86,8 @@ calcular_financiamento_apartamento/
     │   ├── arquitetura.md
     │   └── decisoes.md
     └── desenvolvimento/
-        └── tarefas.md
+        ├── tarefas.md
+        └── docker.md
 ```
 
 ---
@@ -551,6 +557,31 @@ TRInvalidaError
 ProjecaoError
 
 Nunca utilizar Exception genérica.
+
+---
+
+# Contêiner de Produção
+
+O `Dockerfile` utiliza build em múltiplos estágios. O primeiro estágio instala,
+com `uv sync --frozen --no-dev`, somente as dependências bloqueadas de runtime.
+O estágio final recebe o ambiente virtual e os arquivos estritamente necessários
+para executar dashboard e CLI. O cache do `uv` fica restrito ao build e bytecode
+pré-compilado não é copiado para a imagem final.
+
+O dashboard é o processo padrão na porta 8501. A mesma imagem executa a CLI por
+sobrescrita do comando no Compose.
+
+Controles obrigatórios:
+
+- usuário sem privilégios;
+- sistema de arquivos raiz somente leitura;
+- `/tmp` em `tmpfs` para uploads e caches transitórios;
+- capabilities removidas e `no-new-privileges`;
+- healthcheck do Streamlit;
+- PDFs, `dados/`, testes, documentação, Git e caches fora da imagem.
+
+O diretório local `dados/`, ignorado pelo Git, é montado em `/dados` apenas para
+entrada e saída explícita de comandos da CLI.
 
 ---
 

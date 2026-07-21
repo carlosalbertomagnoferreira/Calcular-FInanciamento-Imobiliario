@@ -2,7 +2,11 @@
 
 from simulador.calibracao import calibrar_historico
 from simulador.analise import preparar_analise
-from simulador.comparacao import comparar_estrategias, comparar_projecoes
+from simulador.comparacao import (
+    comparar_estrategias,
+    comparar_parcelas,
+    comparar_projecoes,
+)
 from simulador.amortizacao import (
     gerar_amortizacoes_recorrentes,
     criar_agenda_estrategia,
@@ -37,6 +41,7 @@ __all__ = [
     "preparar_analise",
     "comparar_projecoes",
     "comparar_estrategias",
+    "comparar_parcelas",
     "gerar_amortizacoes_recorrentes",
     "criar_agenda_estrategia",
     "normalizar_data_amortizacao",

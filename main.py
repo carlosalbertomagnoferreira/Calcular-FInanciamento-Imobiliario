@@ -278,7 +278,7 @@ def validar(csv: Path = typer.Option(Path("extrato.csv"), "--csv")) -> None:
 @app.command("extrair-pdf")
 def extrair_pdf(
     pdf: Path = typer.Option(
-        Path("extrato319405086.pdf"), "--pdf", help="Extrato PDF do Banco do Brasil."
+        ..., "--pdf", help="PDF textual do Banco do Brasil fornecido localmente."
     ),
     saida: Path = typer.Option(
         Path("extrato_extraido.csv"), "--saida", help="CSV extraído e validado."

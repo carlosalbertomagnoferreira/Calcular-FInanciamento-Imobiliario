@@ -5,7 +5,11 @@ import pandas as pd
 import pytest
 
 from modelos import CenarioProjecao, EstrategiaAmortizacao
-from simulador.comparacao import comparar_estrategias, comparar_projecoes
+from simulador.comparacao import (
+    comparar_estrategias,
+    comparar_parcelas,
+    comparar_projecoes,
+)
 
 
 def test_compara_metricas_das_projecoes() -> None:
@@ -95,3 +99,63 @@ def test_rejeita_estrategias_com_mesmo_nome() -> None:
 
     with pytest.raises(ValueError, match="nomes das estratégias"):
         comparar_estrategias(cenario, [estrategia, estrategia])
+
+
+def test_cria_comparacao_compacta_parcela_a_parcela() -> None:
+    base = pd.DataFrame(
+        {
+            "Número da Parcela": [126, 127],
+            "Data": [date(2026, 8, 10), date(2026, 9, 10)],
+            "Saldo Corrigido": [Decimal("1000"), Decimal("700")],
+            "Prestação": [Decimal("400"), Decimal("400")],
+            "Saldo Final": [Decimal("700"), Decimal("300")],
+        }
+    )
+    simulada = pd.DataFrame(
+        {
+            "Número da Parcela": [126, 127],
+            "Data": [date(2026, 8, 10), date(2026, 9, 10)],
+            "Saldo Corrigido": [Decimal("1000"), Decimal("500")],
+            "Prestação": [Decimal("400"), Decimal("300")],
+            "Saldo Final": [Decimal("500"), Decimal("200")],
+        }
+    )
+
+    comparativo = comparar_parcelas(base, simulada)
+
+    assert tuple(comparativo.columns) == (
+        "Número da Parcela",
+        "Data",
+        "Saldo Corrigido",
+        "Prestação Total",
+        "Saldo Final",
+        "Economia na Prestação",
+        "Redução do Saldo",
+    )
+    assert comparativo.iloc[1]["Prestação Total"] == Decimal("300")
+    assert comparativo.iloc[1]["Economia na Prestação"] == Decimal("100")
+    assert comparativo.iloc[1]["Redução do Saldo"] == Decimal("100")
+
+
+def test_rejeita_parcela_simulada_sem_correspondencia_na_base() -> None:
+    base = pd.DataFrame(
+        {
+            "Número da Parcela": [126],
+            "Data": [date(2026, 8, 10)],
+            "Saldo Corrigido": [Decimal("1000")],
+            "Prestação": [Decimal("400")],
+            "Saldo Final": [Decimal("700")],
+        }
+    )
+    simulada = base.assign(**{"Número da Parcela": [127]})
+
+    with pytest.raises(ValueError, match="parcela 127"):
+        comparar_parcelas(base, simulada)
+
+
+def test_rejeita_projecao_compacta_sem_colunas_obrigatorias() -> None:
+    with pytest.raises(ValueError, match="projeção base.*Saldo Corrigido"):
+        comparar_parcelas(
+            pd.DataFrame({"Número da Parcela": [126]}),
+            pd.DataFrame({"Número da Parcela": [126]}),
+        )

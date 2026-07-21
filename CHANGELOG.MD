@@ -10,15 +10,36 @@ Versionamento baseado em **Semantic Versioning (SemVer)**.
 
 # [Unreleased]
 
+## Added
+
+- Dockerfile multi-stage e Docker Compose para executar dashboard e CLI com
+  usuário sem privilégios, healthcheck e filesystem raiz somente leitura
+- Guia de execução em Docker, incluindo portas, volume privado, UID/GID e
+  comandos operacionais
+
+## Changed
+
+- PDFs de extratos bancários deixam de ser versionados e devem ser fornecidos
+  localmente pelo usuário nos fluxos de conversão e dashboard
+- Dependências diretas reduzidas às bibliotecas efetivamente usadas em produção
+- Versão do projeto preparada para 1.3.0
+- Testes de extração, upload e CLI deixam de depender do PDF privado removido e
+  passam a usar texto determinístico derivado do CSV anonimizado
+- `extrair-pdf` passa a exigir explicitamente o argumento `--pdf`
+- Dashboard recebe smoke test nativo do Streamlit sem upload de dados privados
+- Tabela de simulação do dashboard passa a exibir apenas valores essenciais e
+  comparativos de prestação e saldo contra o cenário-base
+
 ---
 
 # [1.2.0] - 2026-07-19
 
 ## Added
 
-- Conversão de extrato PDF textual para CSV validado pelo comando `extrair-pdf`
-- Dashboard Streamlit para upload seguro de CSV ou PDF textual, análise,
-  gráficos, downloads e simulações avançadas
+- Conversão de extrato PDF textual fornecido pelo usuário para CSV validado pelo
+  comando `extrair-pdf`
+- Dashboard Streamlit para upload seguro de CSV ou PDF textual fornecido pelo
+  usuário, análise, gráficos, downloads e simulações avançadas
 - Planejamento de metas no dashboard com aportes únicos ou recorrentes e
   visualização da projeção recalculada
 

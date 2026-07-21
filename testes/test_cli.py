@@ -1,6 +1,7 @@
 """Testes da interface de linha de comando."""
 
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from typer.testing import CliRunner
 
@@ -33,20 +34,25 @@ def test_planejar_meta_de_prestacao_exibe_resultado() -> None:
     assert "Prestação obtida:" in resultado.output
 
 
-def test_extrair_pdf_gera_csv_validado(tmp_path: Path) -> None:
+def test_extrair_pdf_gera_csv_validado(
+    tmp_path: Path,
+    pdf_textual_bb_mock: MagicMock,
+    pdf_textual_temporario: Path,
+) -> None:
     destino = tmp_path / "extrato_extraido.csv"
     resultado = runner.invoke(
         app,
         [
             "extrair-pdf",
             "--pdf",
-            str(RAIZ_PROJETO / "extrato319405086.pdf"),
+            str(pdf_textual_temporario),
             "--saida",
             str(destino),
         ],
     )
 
     assert resultado.exit_code == 0
+    assert pdf_textual_bb_mock.call_count == 1
     assert "PDF extraído e validado: 164 eventos." in resultado.output
     assert destino.exists()
 

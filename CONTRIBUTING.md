@@ -41,14 +41,15 @@ uv sync --all-groups
 Utilizamos:
 
 - pandas
-- numpy
 - matplotlib
+- pdfplumber
+- streamlit
 - typer
-- rich
 - pytest
 - mypy
 - ruff
 - black
+- Docker
 
 ---
 
@@ -171,6 +172,33 @@ uv run --group dev mypy .
 ```
 
 Todos devem passar sem erros.
+
+Os testes de PDF da suíte padrão usam o CSV anonimizado para simular a saída
+textual do documento. Para um smoke test opcional com arquivo local:
+
+```bash
+EXTRATO_PDF_TESTE=/caminho/para/seu_extrato.pdf \
+  uv run --group dev pytest testes/test_extrator_pdf.py
+```
+
+Nunca adicione esse arquivo ao repositório.
+
+---
+
+# Docker
+
+Mudanças em dependências, inicialização, leitura de arquivos ou interface devem
+validar também:
+
+```bash
+uv lock --check
+docker compose config --quiet
+docker compose build
+```
+
+A imagem final não deve incluir dependências de desenvolvimento, PDFs, dados
+privados, testes, documentação ou caches locais. Preserve a execução sem root,
+o healthcheck e o sistema de arquivos raiz somente leitura.
 
 ---
 
